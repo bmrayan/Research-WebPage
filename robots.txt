@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /CVs/
+Disallow: /bibtex/
+
+Sitemap: https://bmrayan.github.io/sitemap.xml
