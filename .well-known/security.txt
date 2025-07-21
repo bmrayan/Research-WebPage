@@ -1,0 +1,9 @@
+Contact: mailto:rayan.barhdadi@tamu.edu
+Expires: 2026-01-20T00:00:00.000Z
+Preferred-Languages: en
+Canonical: https://bmrayan.github.io/.well-known/security.txt
+Policy: https://bmrayan.github.io/security-policy
+
+# Security Acknowledgments
+# We appreciate responsible disclosure of security vulnerabilities.
+# Please email security concerns to rayan.barhdadi@tamu.edu
