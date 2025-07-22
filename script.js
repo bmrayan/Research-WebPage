@@ -55,10 +55,13 @@ document.addEventListener('keydown', function(e) {
     }
 });
 
-// Security: Basic developer tools detection
+// Security: Basic developer tools detection (optimized for performance)
 let devtools = {open: false, orientation: null};
 const threshold = 160;
-setInterval(function() {
+let devtoolCheckInterval = null;
+
+// Only check when visibility changes or on focus
+function checkDevTools() {
     if (window.outerHeight - window.innerHeight > threshold || 
         window.outerWidth - window.innerWidth > threshold) {
         if (!devtools.open) {
@@ -70,7 +73,12 @@ setInterval(function() {
     } else {
         devtools.open = false;
     }
-}, 500);
+}
+
+// Check on visibility change and focus events instead of constant interval
+document.addEventListener('visibilitychange', checkDevTools);
+window.addEventListener('focus', checkDevTools);
+window.addEventListener('resize', checkDevTools);
 
 // Dark Mode Functionality - Initialize immediately to prevent flash
 (function() {
@@ -217,51 +225,88 @@ document.addEventListener('DOMContentLoaded', function() {
             const targetSection = document.querySelector(targetId);
             
             if (targetSection) {
-                const offset = 70;
+                const offset = 80;
                 const targetPosition = targetSection.offsetTop - offset;
                 
-                // Smooth scroll with performance optimization
+                // Enhanced smooth scroll - no glitches for long distances
                 const startPosition = window.pageYOffset;
                 const distance = targetPosition - startPosition;
-                const duration = 600; // Optimized duration
+                const absDistance = Math.abs(distance);
+                
+                // Dynamic duration - more responsive for long distances
+                let duration;
+                if (absDistance < 500) {
+                    duration = 400;
+                } else if (absDistance < 1500) {
+                    duration = 600;
+                } else if (absDistance < 3000) {
+                    duration = 800;
+                } else {
+                    duration = 1000;
+                }
+                
                 let start = null;
+                let isAnimating = true;
 
                 function animateScroll(timestamp) {
                     if (!start) start = timestamp;
+                    if (!isAnimating) return;
+                    
                     const progress = timestamp - start;
                     const percentage = Math.min(progress / duration, 1);
                     
-                    // Simpler easing for better performance
-                    const ease = percentage < 0.5 
-                        ? 2 * percentage * percentage 
-                        : -1 + (4 - 2 * percentage) * percentage;
+                    // Enhanced easing for long distances (ease-in-out-cubic)
+                    let ease;
+                    if (percentage < 0.5) {
+                        ease = 4 * percentage * percentage * percentage;
+                    } else {
+                        ease = 1 - Math.pow(-2 * percentage + 2, 3) / 2;
+                    }
                     
-                    window.scrollTo(0, startPosition + distance * ease);
+                    const currentPosition = startPosition + distance * ease;
                     
-                    if (progress < duration) {
+                    // Use smooth scrollTo with fallback
+                    try {
+                        window.scrollTo({
+                            top: currentPosition,
+                            behavior: 'auto'
+                        });
+                    } catch (e) {
+                        window.scrollTo(0, currentPosition);
+                    }
+                    
+                    if (percentage < 1) {
                         requestAnimationFrame(animateScroll);
+                    } else {
+                        isAnimating = false;
                     }
                 }
                 
                 requestAnimationFrame(animateScroll);
                 
-                // Keep the clicked item active longer, until user scrolls significantly
+                // Keep the clicked item active longer for long scrolls
+                const activeTimeout = Math.min(duration + 500, 1500);
                 setTimeout(() => {
                     isUserInteracting = false;
-                }, 1000);
+                }, activeTimeout);
             }
         });
     });
 
     // Reset interaction state when user scrolls manually (not from click)
     let lastScrollY = window.scrollY;
-    window.addEventListener('scroll', function() {
+    let scrollResetTimeout = null;
+    
+    function handleScroll() {
         const currentScrollY = window.scrollY;
         const scrollDelta = Math.abs(currentScrollY - lastScrollY);
         
         // If user scrolls more than 100px manually, reset interaction state
         if (scrollDelta > 100 && isUserInteracting) {
-            setTimeout(() => {
+            // Clear existing timeout to prevent multiple calls
+            if (scrollResetTimeout) clearTimeout(scrollResetTimeout);
+            
+            scrollResetTimeout = setTimeout(() => {
                 isUserInteracting = false;
                 // Invalidate cache when user scrolls significantly
                 cachedSections = null;
@@ -270,9 +315,23 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         
         lastScrollY = currentScrollY;
-    }, { passive: true });
+    }
 
-    window.addEventListener('scroll', requestTick);
+    // Combine scroll handlers for better performance
+    let combinedScrollTicking = false;
+    
+    function handleCombinedScroll() {
+        if (!combinedScrollTicking) {
+            requestAnimationFrame(() => {
+                updateActiveSection();
+                handleScroll();
+                combinedScrollTicking = false;
+            });
+            combinedScrollTicking = true;
+        }
+    }
+
+    window.addEventListener('scroll', handleCombinedScroll, { passive: true });
 
     // Add scrolled class to navigation on scroll (throttled)
     const navigation = document.querySelector('.navigation');
@@ -488,9 +547,15 @@ function showBibTeX(paperKey) {
         content.textContent = bibtexData[paperKey].content;
         bibtexHeader.textContent = `${bibtexData[paperKey].title}.bib`;
         
+        // Store current scroll position to prevent jumping to top
+        const currentScrollPosition = window.pageYOffset;
+        
         // Show modal with simple animation
         modal.style.display = 'block';
         document.body.style.overflow = 'hidden';
+        document.body.style.position = 'fixed';
+        document.body.style.top = `-${currentScrollPosition}px`;
+        document.body.style.width = '100%';
         
         // Trigger animation
         setTimeout(() => {
@@ -502,13 +567,24 @@ function showBibTeX(paperKey) {
 function closeBibTeX() {
     const modal = document.getElementById('bibtex-modal');
     
+    // Get the scroll position from the stored top value
+    const scrollPosition = Math.abs(parseInt(document.body.style.top) || 0);
+    
     // Remove show class for exit animation
     modal.classList.remove('show');
     
     // Hide modal after animation completes
     setTimeout(() => {
         modal.style.display = 'none';
-        document.body.style.overflow = 'auto';
+        
+        // Restore body styles and scroll position
+        document.body.style.overflow = '';
+        document.body.style.position = '';
+        document.body.style.top = '';
+        document.body.style.width = '';
+        
+        // Restore scroll position
+        window.scrollTo(0, scrollPosition);
     }, 200);
 }
 

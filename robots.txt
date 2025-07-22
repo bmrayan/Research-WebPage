@@ -1,6 +1,25 @@
 User-agent: *
 Allow: /
-Disallow: /CVs/
+Allow: /CVs/CV_ICML.pdf
+Allow: /blog.html
+Allow: /blog-posts/
+Allow: /papers/
+Allow: /posters/
+Allow: /photos/
+Allow: /publication_cover/
 Disallow: /bibtex/
+Disallow: /.git/
+Disallow: /CNAME
+Disallow: /README.md
 
+# Priority pages for crawling
+Crawl-delay: 1
+
+# Google Search Console verification
+# google-site-verification: your-verification-code-here
+
+# Sitemap location
 Sitemap: https://bmrayan.github.io/sitemap.xml
+
+# Additional sitemaps
+Sitemap: https://bmrayan.github.io/sitemap-images.xml
