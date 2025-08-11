@@ -40,7 +40,7 @@ This website is designed for static hosting on GitHub Pages, Netlify, or similar
 
 Mohamed Rayan Barhdadi  
 Email: rayan.barhdadi@tamu.edu  
-Website: https://bmrayan.github.io
+Website: https://bmrayan.com
 
 ## License
 

@@ -49,7 +49,7 @@ Options -Indexes
 <IfModule mod_rewrite.c>
     RewriteEngine On
     RewriteCond %{HTTP_REFERER} !^$
-    RewriteCond %{HTTP_REFERER} !^https?://(www\.)?bmrayan\.github\.io [NC]
+    RewriteCond %{HTTP_REFERER} !^https?://(www\.)?bmrayan\.com [NC]
     RewriteCond %{HTTP_REFERER} !^https?://(www\.)?github\.com [NC]
     RewriteRule \.(jpg|jpeg|png|gif|webp|svg|pdf)$ - [F,NC,L]
 </IfModule>
