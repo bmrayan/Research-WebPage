@@ -8,24 +8,24 @@
 
     <!-- Main Homepage -->
     <url>
-        <loc>https://bmrayan.github.io/</loc>
+        <loc>https://bmrayan.com/</loc>
         <lastmod>2025-01-22</lastmod>
         <changefreq>weekly</changefreq>
         <priority>1.0</priority>
         <image:image>
-            <image:loc>https://bmrayan.github.io/assets/images/photos/Light%20HS25.jpg</image:loc>
+            <image:loc>https://bmrayan.com/assets/images/photos/Light%20HS25.jpg</image:loc>
             <image:caption>Mohamed Rayan Barhdadi - Researcher Profile Photo</image:caption>
             <image:title>Mohamed Rayan Barhdadi</image:title>
         </image:image>
         <image:image>
-            <image:loc>https://bmrayan.github.io/assets/images/photos/MAINPIC.jpeg</image:loc>
+            <image:loc>https://bmrayan.com/assets/images/photos/MAINPIC.jpeg</image:loc>
             <image:caption>Mohamed Rayan Barhdadi Research Photo</image:caption>
         </image:image>
     </url>
 
     <!-- Blog/Journal Page -->
     <url>
-        <loc>https://bmrayan.github.io/blog.html</loc>
+        <loc>https://bmrayan.com/blog.html</loc>
         <lastmod>2025-01-22</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.8</priority>
