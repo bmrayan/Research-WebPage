@@ -52,9 +52,6 @@
 </head>
 <body>
     <div class="layout-wrapper">
-        <!-- Mobile Sidebar Overlay -->
-        <div class="sidebar-overlay" onclick="closeMobileMenu()"></div>
-        
         <!-- ============================================ -->
         <!-- SIDEBAR - Journal Navigation -->
         <!-- ============================================ -->
@@ -91,24 +88,8 @@
         <!-- ============================================ -->
         <!-- MAIN CONTENT - Blog Posts -->
         <!-- ============================================ -->
-        <div class="main-container">
-            <!-- Mobile Header for Blog -->
-            <header class="top-header">
-                <div class="header-content">
-                    <!-- Mobile Menu Button -->
-                    <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle navigation menu">
-                        <i class="fas fa-bars"></i>
-                    </button>
-                    
-                    <!-- Blog Title -->
-                    <div class="blog-mobile-title">
-                        <h1>Journal</h1>
-                    </div>
-                </div>
-            </header>
-            
-            <main class="main-content">
-                <div class="blog-content">
+        <main class="main-content">
+            <div class="blog-content">
                 <!-- Blog Posts Section -->
                 <section id="first-post" class="section">
                     <article class="blog-post-card">
@@ -135,9 +116,7 @@
             <footer class="footer blog-footer-positioned">
                 <p>&copy; 2025 Mohamed Rayan Barhdadi. All rights reserved.</p>
             </footer>
-                </div>
-            </main>
-        </div>
+        </main>
     </div>
 
     <script src="assets/js/script.js"></script>
