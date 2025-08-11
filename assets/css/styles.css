@@ -1939,13 +1939,9 @@ img {
         width: calc(100% - 280px);
     }
     
-    /* Show mobile profile section */
+    /* Keep mobile profile section hidden on tablets - only show on phones */
     .mobile-profile {
-        display: block;
-        background: var(--bg-card);
-        border-bottom: 1px solid var(--border-color);
-        padding: 1.5rem;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        display: none;
     }
     
     .mobile-profile-content {
@@ -1962,11 +1958,13 @@ img {
     }
     
     .mobile-profile-photo {
-        width: 80px;
-        height: 80px;
+        width: 60px;
+        height: 60px;
         border-radius: 50%;
         object-fit: cover;
         flex-shrink: 0;
+        max-width: 60px;
+        max-height: 60px;
     }
     
     .mobile-profile-text {
@@ -2361,35 +2359,43 @@ img {
         padding: 1rem 0.8rem 2rem 0.8rem;
     }
     
+    /* Show mobile profile section ONLY on phone screens */
     .mobile-profile {
-        padding: 1rem;
+        display: block;
+        background: var(--bg-card);
+        border-bottom: 1px solid var(--border-color);
+        padding: 0.8rem;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
     }
     
     .mobile-profile-info {
-        margin-bottom: 1rem;
+        margin-bottom: 0.8rem;
         text-align: center;
         flex-direction: column;
-        gap: 0.8rem;
+        gap: 0.5rem;
     }
     
     .mobile-profile-photo {
-        width: 70px;
-        height: 70px;
+        width: 50px;
+        height: 50px;
+        max-width: 50px;
+        max-height: 50px;
     }
     
     .mobile-name {
-        font-size: 1.3rem;
+        font-size: 1.1rem;
         text-align: center;
+        line-height: 1.2;
     }
     
     .mobile-title {
         text-align: center;
-        font-size: 0.8rem;
+        font-size: 0.75rem;
     }
     
     .mobile-affiliation {
         text-align: center;
-        font-size: 0.75rem;
+        font-size: 0.7rem;
     }
     
     .mobile-socials {
@@ -2478,8 +2484,10 @@ img {
     }
     
     .mobile-profile-photo {
-        width: 60px;
-        height: 60px;
+        width: 45px;
+        height: 45px;
+        max-width: 45px;
+        max-height: 45px;
     }
     
     .mobile-name {
