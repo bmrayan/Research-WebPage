@@ -270,6 +270,9 @@
 </head>
 <body>
     <div class="layout-wrapper">
+        <!-- Mobile Sidebar Overlay -->
+        <div class="sidebar-overlay" onclick="closeMobileMenu()"></div>
+        
         <!-- ============================================ -->
         <!-- SIDEBAR - Profile and Navigation -->
         <!-- ============================================ -->
@@ -365,6 +368,11 @@
             <!-- Top Header Bar -->
             <header class="top-header">
                 <div class="header-content">
+                    <!-- Mobile Menu Button -->
+                    <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle navigation menu">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    
                     <!-- Navigation -->
                     <nav class="top-nav">
                         <a href="#about" class="nav-link current-section">About</a>
