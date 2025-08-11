@@ -1,0 +1,15 @@
+User-agent: *
+Allow: /
+Allow: /blog.html
+Allow: /assets/
+Disallow: /.git/
+Disallow: /CNAME
+Disallow: /README.md
+Disallow: /.htaccess
+Disallow: /.well-known/
+
+# Priority pages for crawling
+Crawl-delay: 1
+
+# Sitemap location
+Sitemap: https://bmrayan.github.io/sitemap.xml
