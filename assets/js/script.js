@@ -677,3 +677,81 @@ document.addEventListener('keydown', function(event) {
         closeBibTeX();
     }
 });
+
+// ================================================
+// MOBILE MENU FUNCTIONALITY
+// ================================================
+
+function toggleMobileMenu() {
+    const sidebar = document.querySelector('.sidebar');
+    const overlay = document.querySelector('.sidebar-overlay');
+    const menuBtn = document.querySelector('.mobile-menu-btn');
+    const icon = menuBtn.querySelector('i');
+    
+    const isActive = sidebar.classList.contains('active');
+    
+    if (!isActive) {
+        // Open menu
+        sidebar.classList.add('active');
+        overlay.classList.add('active');
+        icon.className = 'fas fa-times';
+        
+        // Prevent body scroll when menu is open
+        document.body.style.overflow = 'hidden';
+    } else {
+        // Close menu
+        sidebar.classList.remove('active');
+        overlay.classList.remove('active');
+        icon.className = 'fas fa-bars';
+        
+        // Restore body scroll
+        document.body.style.overflow = '';
+    }
+}
+
+function closeMobileMenu() {
+    const sidebar = document.querySelector('.sidebar');
+    const overlay = document.querySelector('.sidebar-overlay');
+    const menuBtn = document.querySelector('.mobile-menu-btn');
+    const icon = menuBtn?.querySelector('i');
+    
+    sidebar.classList.remove('active');
+    overlay.classList.remove('active');
+    
+    if (icon) {
+        icon.className = 'fas fa-bars';
+    }
+    
+    // Restore body scroll
+    document.body.style.overflow = '';
+}
+
+// Close mobile menu when clicking on nav links
+document.addEventListener('DOMContentLoaded', function() {
+    const navLinks = document.querySelectorAll('.nav-link');
+    const sidebarLinks = document.querySelectorAll('.sidebar a');
+    
+    // Add click listener to navigation links
+    navLinks.forEach(link => {
+        link.addEventListener('click', closeMobileMenu);
+    });
+    
+    // Add click listener to sidebar links
+    sidebarLinks.forEach(link => {
+        link.addEventListener('click', closeMobileMenu);
+    });
+    
+    // Close menu on window resize if screen becomes larger
+    window.addEventListener('resize', function() {
+        if (window.innerWidth > 768) {
+            closeMobileMenu();
+        }
+    });
+    
+    // Close menu on escape key
+    document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape') {
+            closeMobileMenu();
+        }
+    });
+});
