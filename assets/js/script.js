@@ -540,14 +540,12 @@ document.addEventListener('DOMContentLoaded', function() {
 const bibtexData = {
     empathia: {
         title: "EMPATHIA",
-        content: `@misc{barhdadi2025empathia,
-  title     = {EMPATHIA: Multi-Faceted Human-AI Collaboration for Refugee Integration},
-  author    = {Barhdadi, Mohamed Rayan and Tuncel, Mehmet and Serpedin, Erchin and Kurban, Hasan},
-  year      = {2025},
-  eprint    = {2501.xxxxx},
-  archivePrefix = {arXiv},
-  primaryClass = {cs.AI},
-  note      = {arXiv preprint}
+        content: `@article{barhdadi2025empathia,
+  title  = {EMPATHIA: Multi-Faceted Human-AI Collaboration for Refugee Integration},
+  author = {Barhdadi, Mohamed Rayan and Tuncel, Mehmet and Serpedin, Erchin and Kurban, Hasan},
+  journal = {arXiv preprint arXiv:2508.07671},
+  year   = {2025},
+  url    = {https://arxiv.org/abs/2508.07671}
 }`
     },
     physicsnerf: {
