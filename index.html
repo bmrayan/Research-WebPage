@@ -631,7 +631,8 @@
             overflow: hidden;
         }
         
-        .social-link:hover {
+        .social-link:hover,
+        .social-link:focus {
             background: var(--bg-hover);
             border-color: var(--accent-primary);
             color: var(--accent-primary);
@@ -640,7 +641,14 @@
         }
         
         .social-link:active {
-            transform: scale(0.98);
+            transform: scale(0.98) translateY(-2px);
+            background: var(--bg-hover);
+            border-color: var(--accent-primary);
+        }
+        
+        .social-link:active i {
+            color: var(--accent-hover);
+            transform: scale(1.15) rotate(8deg);
         }
         
         .social-link i {
@@ -651,7 +659,8 @@
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
         
-        .social-link:hover i {
+        .social-link:hover i,
+        .social-link:focus i {
             transform: scale(1.15) rotate(8deg);
             color: var(--accent-hover);
         }
