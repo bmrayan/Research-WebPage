@@ -75,96 +75,110 @@
     
     <!-- Mobile-specific styles -->
     <style>
-        /* Mobile version adjustments */
-        @media (max-width: 768px), .mobile-version {
-            .layout-wrapper {
-                flex-direction: column;
-            }
-            
-            .sidebar {
-                position: fixed;
-                top: 0;
-                left: 0;
-                right: 0;
-                width: 100%;
-                height: auto;
-                max-height: none;
-                z-index: 1000;
-                background: white;
-                box-shadow: 0 2px 4px rgba(80, 0, 0, 0.1);
-            }
-            
-            .sidebar-content {
-                padding: 1rem;
-            }
-            
-            .back-navigation {
-                margin-bottom: 1rem;
-            }
-            
-            .journal-profile {
-                text-align: center;
-                padding: 1rem 0;
-            }
-            
-            .journal-title {
-                font-size: 1.5rem;
-            }
-            
-            .journal-description {
-                font-size: 0.9rem;
-            }
-            
-            .post-navigation {
-                display: none;
-            }
-            
-            .main-content {
-                margin-left: 0;
-                padding-top: 200px;
-                padding: 1rem;
-                margin-top: 150px;
-            }
-            
-            .blog-post-card {
-                padding: 1.5rem;
-                margin-bottom: 1.5rem;
-            }
-            
-            .post-title {
-                font-size: 1.3rem;
-            }
-            
-            .post-content {
-                font-size: 0.9rem;
-                line-height: 1.6;
-            }
+        /* Mobile version specific styles */
+        .mobile-version .layout-wrapper {
+            display: block;
         }
         
-        /* Hide mobile elements on desktop */
-        .desktop-version .mobile-only {
-            display: none;
+        .mobile-version .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            width: 100%;
+            height: auto;
+            max-height: 180px;
+            z-index: 1000;
+            background: white;
+            box-shadow: 0 2px 8px rgba(80, 0, 0, 0.1);
+            overflow: visible;
         }
         
-        /* Hide desktop elements on mobile */
-        .mobile-version .desktop-only {
-            display: none;
+        .mobile-version .sidebar-content {
+            padding: 1rem;
+        }
+        
+        .mobile-version .back-navigation {
+            margin-bottom: 0.5rem;
+        }
+        
+        .mobile-version .back-link {
+            font-size: 0.9rem;
+        }
+        
+        .mobile-version .journal-profile {
+            text-align: center;
+            padding: 0.5rem 0;
+        }
+        
+        .mobile-version .journal-title {
+            font-size: 1.5rem;
+            margin: 0.5rem 0;
+        }
+        
+        .mobile-version .journal-author {
+            font-size: 0.9rem;
+            margin: 0.25rem 0;
+        }
+        
+        .mobile-version .journal-description {
+            font-size: 0.8rem;
+            line-height: 1.4;
+            display: none; /* Hide long description on mobile */
         }
         
         .mobile-version .post-navigation {
             display: none;
         }
         
-        .mobile-version .sidebar {
-            position: sticky;
-            top: 0;
-            width: 100%;
-            height: auto;
-        }
-        
         .mobile-version .main-content {
             margin-left: 0;
+            margin-top: 120px;
+            padding: 1rem;
             width: 100%;
+            display: block !important;
+            visibility: visible !important;
+        }
+        
+        .mobile-version .blog-content {
+            display: block !important;
+            visibility: visible !important;
+        }
+        
+        .mobile-version .section {
+            display: block !important;
+            visibility: visible !important;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .mobile-version .blog-post-card {
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(80, 0, 0, 0.08);
+        }
+        
+        .mobile-version .post-title {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .mobile-version .post-meta {
+            font-size: 0.8rem;
+            margin-bottom: 1rem;
+        }
+        
+        .mobile-version .post-content {
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+        
+        .mobile-version .coming-soon-message {
+            font-size: 1rem;
+            padding: 2rem;
+            text-align: center;
         }
     </style>
 </head>
