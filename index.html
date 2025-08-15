@@ -267,6 +267,23 @@
     <!-- Preload CSS -->
     <link rel="preload" href="assets/css/styles.css" as="style">
     <link rel="stylesheet" href="assets/css/styles.css">
+    
+    <!-- Override to ensure advisors show -->
+    <style>
+        /* Force advisors to be visible */
+        .experience-item .exp-advisor,
+        #desktop-content .exp-advisor,
+        .exp-details .exp-advisor {
+            display: block !important;
+            visibility: visible !important;
+            color: #666 !important;
+            font-size: 13px !important;
+            margin: 4px 0 8px 0 !important;
+            opacity: 1 !important;
+            height: auto !important;
+            overflow: visible !important;
+        }
+    </style>
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
@@ -982,6 +999,11 @@
             margin-bottom: 8px;
         }
         
+        /* Reduce spacing in desktop version */
+        #desktop-content .exp-header {
+            margin-bottom: -13px;
+        }
+        
         .exp-header h3 {
             font-size: 16px;
             font-weight: 600;
@@ -1009,18 +1031,34 @@
             margin: 0;
         }
         
+        /* Ensure advisors are visible in desktop */
+        #desktop-content .exp-advisor {
+            display: block !important;
+            visibility: visible !important;
+            height: auto !important;
+            opacity: 1 !important;
+        }
+        
         p.exp-org {
             color: var(--accent-primary);
             margin: 0 0 8px 0 !important;
             font-weight: 500;
         }
         
+        /* Tighter spacing for desktop */
+        #desktop-content p.exp-org {
+            margin: 0 0 2px 0 !important;
+        }
+        
         p.exp-advisor {
-            color: #666;
-            margin: 0 0 8px 0 !important;
-            font-size: 13px;
-            display: block;
-            opacity: 1;
+            color: #666 !important;
+            margin: 4px 0 8px 0 !important;
+            font-size: 13px !important;
+            display: block !important;
+            opacity: 1 !important;
+            visibility: visible !important;
+            line-height: 1.4 !important;
+            font-weight: normal !important;
         }
         
         p.exp-desc {
