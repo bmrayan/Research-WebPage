@@ -2,41 +2,55 @@
 <html lang="en" style="scroll-behavior: auto;">
 <head>
     <script>
-        // Device detection and redirection
+        // Device detection and content switching
         (function() {
-            // Check if it's a mobile device (phone, not tablet)
+            // More comprehensive mobile detection
             function isMobilePhone() {
                 const userAgent = navigator.userAgent || navigator.vendor || window.opera;
                 
-                // Check for mobile devices
-                const isMobile = /android|webos|iphone|ipod|blackberry|iemobile|opera mini/i.test(userAgent.toLowerCase());
+                // Check for mobile devices with broader patterns
+                const mobileRegex = /android|webos|iphone|ipod|blackberry|iemobile|opera mini|mobile|phone/i;
+                const isMobile = mobileRegex.test(userAgent.toLowerCase());
                 
-                // Check for tablets
-                const isTablet = /ipad|android(?!.*mobile)|tablet/i.test(userAgent.toLowerCase());
+                // Check for tablets to exclude them
+                const tabletRegex = /ipad|tablet|playbook|silk|(android(?!.*mobile))/i;
+                const isTablet = tabletRegex.test(userAgent.toLowerCase());
                 
-                // Check screen width (phones typically < 768px)
+                // Also check screen size
                 const isSmallScreen = window.innerWidth <= 768;
                 
-                // Return true only for phones, not tablets
-                return isMobile && !isTablet && isSmallScreen;
+                // Additional check for touch capability
+                const hasTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+                
+                // Return true for phones: either detected as mobile (not tablet) OR small screen with touch
+                return (isMobile && !isTablet) || (isSmallScreen && hasTouch && !isTablet);
             }
             
-            // If on mobile phone, load mobile content
-            if (isMobilePhone()) {
-                // Fetch and replace the entire document with mobile version
-                fetch('index-phone.html')
-                    .then(response => response.text())
-                    .then(html => {
-                        document.open();
-                        document.write(html);
-                        document.close();
-                    })
-                    .catch(error => {
-                        console.error('Error loading mobile version:', error);
-                        // Continue with desktop version if mobile fails to load
-                    });
-                return; // Stop executing the rest of the desktop version
-            }
+            // Store device detection result
+            window.isMobileDevice = isMobilePhone();
+            
+            // Debug info
+            console.log('User Agent:', navigator.userAgent);
+            console.log('Screen Width:', window.innerWidth);
+            console.log('Is Mobile Detected:', window.isMobileDevice);
+            
+            // Set initial display based on device detection
+            window.addEventListener('DOMContentLoaded', function() {
+                const desktopContent = document.getElementById('desktop-content');
+                const mobileContent = document.getElementById('mobile-content');
+                
+                if (window.isMobileDevice) {
+                    console.log('Showing mobile version...');
+                    if (desktopContent) desktopContent.style.display = 'none';
+                    if (mobileContent) mobileContent.style.display = 'block';
+                    document.body.classList.add('mobile-version');
+                } else {
+                    console.log('Showing desktop version...');
+                    if (mobileContent) mobileContent.style.display = 'none';
+                    if (desktopContent) desktopContent.style.display = 'block';
+                    document.body.classList.add('desktop-version');
+                }
+            });
         })();
         
         // Immediate scroll reset before anything else loads
@@ -196,116 +210,15 @@
     <meta name="twitter:description" content="Researcher in Machine Learning and Computer Vision at Texas A&M University">
     <meta name="twitter:image" content="https://bmrayan.com/assets/images/photos/Light%20HS25.jpg">
     
-    <!-- Primary Meta Tags -->
-    <meta name="title" content="Mohamed Rayan Barhdadi - Electrical Engineering Researcher">
-    <meta name="description" content="Mohamed Rayan Barhdadi is an Electrical Engineering researcher at Texas A&M University Qatar specializing in 3D computer vision, neural 3D reconstruction, and AI for social good. His breakthrough research includes PhysicsNeRF (ICML 2025) for physics-informed neural radiance fields and EMPATHIA (under review NeurIPS 2025) for refugee integration through human-AI collaboration. Known for pioneering work in sparse-view 3D reconstruction and humanitarian AI applications.">
-    <meta name="keywords" content="Mohamed Rayan Barhdadi, Mohammad Rayan Barhdadi, Mohammed Rayan Barhdadi, M Rayan Barhdadi, Mohamed Barhdadi, Mohammad Barhdadi, Mohammed Barhdadi, M Barhdadi, BM Rayan, BM Rayane, B M Rayan, B M Rayane, BMR Rayan, BM Barhdadi, B M Barhdadi, BMR Barhdadi, Rayan Barhdadi, Rayane Barhdadi, Rayan Baghdadi, Rayane Baghdadi, Mohamed R Barhdadi, Mohammad R Barhdadi, Mohammed R Barhdadi, M R Barhdadi, electrical engineering, deep learning, machine learning, AI research, Texas A&M Qatar, physics-informed neural networks, 3D deep learning">
-    <meta name="author" content="Mohamed Rayan Barhdadi">
-    <meta name="robots" content="index, follow">
-    <meta name="language" content="English">
-    <meta name="canonical" href="https://bmrayan.com/">
-    
-    <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="profile">
-    <meta property="og:url" content="https://bmrayan.com/">
-    <meta property="og:title" content="Mohamed Rayan Barhdadi - 3D Computer Vision Researcher & AI Engineer">
-    <meta property="og:description" content="Mohamed Rayan Barhdadi - Electrical Engineering researcher at Texas A&M University Qatar. Breakthrough research in PhysicsNeRF (ICML 2025) for 3D reconstruction and EMPATHIA (NeurIPS 2025) for refugee integration. Leading expert in physics-informed neural networks and humanitarian AI applications.">
-    <meta property="og:image" content="https://bmrayan.com/photos/Light HS25.jpg">
-    <meta property="og:image:width" content="1200">
-    <meta property="og:image:height" content="630">
-    <meta property="og:image:alt" content="Mohamed Rayan Barhdadi - Researcher Profile Photo">
-    <meta property="og:site_name" content="Mohamed Rayan Barhdadi - Researcher & Engineer">
-    <meta property="og:locale" content="en_US">
-    <meta property="profile:first_name" content="Mohamed Rayan">
-    <meta property="profile:last_name" content="Barhdadi">
-    <meta property="profile:username" content="bmrayan">
-    
-    <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="https://bmrayan.com/">
-    <meta property="twitter:title" content="Mohamed Rayan Barhdadi - 3D Computer Vision Researcher">
-    <meta property="twitter:description" content="Electrical Engineering researcher at Texas A&M Qatar • 3D Computer Vision & AI for Social Good • ICML 2025 • Adventure enthusiast climbing mountains worldwide 🏔️">
-    <meta property="twitter:image" content="https://bmrayan.com/photos/Light HS25.jpg">
-    <meta property="twitter:image:alt" content="Mohamed Rayan Barhdadi - Researcher Profile Photo">
-    <meta property="twitter:site" content="@MRBarhdadi">
-    <meta property="twitter:creator" content="@MRBarhdadi">
-    
-    <!-- LinkedIn -->
-    <meta property="linkedin:owner" content="bmrayan">
-    
-    <!-- Additional Social Media -->
-    <meta property="article:author" content="https://www.linkedin.com/in/bmrayan/">
-    <meta property="article:publisher" content="https://bmrayan.com/">
-    
-    <!-- Google Knowledge Graph -->
-    <meta name="google-site-verification" content="your-verification-code-here">
-    
-    <!-- Google Analytics 4 -->
-    <!-- Replace G-XXXXXXXXXX with your actual Google Analytics measurement ID -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', 'G-XXXXXXXXXX');
-    </script>
-    <link rel="author" href="https://plus.google.com/+MohamedRayanBarhdadi">
-    <link rel="me" href="https://twitter.com/MRBarhdadi">
-    <link rel="me" href="https://www.linkedin.com/in/bmrayan/">
-    <link rel="me" href="https://github.com/BMRayan/">
-    <link rel="me" href="https://scholar.google.com/citations?user=G7qjc6kAAAAJ">
-    
-    <!-- Schema.org breadcrumbs for Google -->
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "BreadcrumbList",
-        "itemListElement": [
-            {
-                "@type": "ListItem",
-                "position": 1,
-                "name": "Home",
-                "item": "https://bmrayan.com/"
-            },
-            {
-                "@type": "ListItem", 
-                "position": 2,
-                "name": "Research",
-                "item": "https://bmrayan.com/#publications"
-            },
-            {
-                "@type": "ListItem",
-                "position": 3,
-                "name": "Blog",
-                "item": "https://bmrayan.com/blog.html"
-            }
-        ]
-    }
-    </script>
-    
     <!-- Resource Hints for Performance -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preconnect" href="https://cdnjs.cloudflare.com">
     <link rel="preconnect" href="https://cdn.jsdelivr.net">
-    <link rel="dns-prefetch" href="https://fonts.googleapis.com">
-    <link rel="dns-prefetch" href="https://fonts.gstatic.com">
-    <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
-    
-    <!-- Preload critical above-the-fold images -->
-    <link rel="preload" as="image" href="assets/images/photos/Light HS25.jpg" fetchpriority="high">
-    <link rel="preload" as="image" href="assets/images/photos/MAINPIC.jpeg" fetchpriority="high">
-    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
-    
-    <!-- Preload critical fonts -->
-    <link rel="preload" href="https://fonts.gstatic.com/s/inter/v12/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuLyfAZ9hiA.woff2" as="font" type="font/woff2" crossorigin>
-    <link rel="preload" href="https://fonts.gstatic.com/s/sourceserifpro/v15/neIQzD-0qpwxpaWvjeD0X88SAOeauXQ-oAGIyY0Wfw.woff2" as="font" type="font/woff2" crossorigin>
     
     <!-- Favicon -->
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%23500000' stroke='%23FFFFFF' stroke-width='2'/><ellipse cx='50' cy='50' rx='45' ry='20' fill='none' stroke='%23FFFFFF' stroke-width='2'/><path d='M 5 50 Q 50 30 95 50' fill='none' stroke='%23FFFFFF' stroke-width='2'/><path d='M 5 50 Q 50 70 95 50' fill='none' stroke='%23FFFFFF' stroke-width='2'/><line x1='50' y1='5' x2='50' y2='95' stroke='%23FFFFFF' stroke-width='2'/></svg>" type="image/svg+xml">
     <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%23500000' stroke='%23FFFFFF' stroke-width='2'/><ellipse cx='50' cy='50' rx='45' ry='20' fill='none' stroke='%23FFFFFF' stroke-width='2'/><path d='M 5 50 Q 50 30 95 50' fill='none' stroke='%23FFFFFF' stroke-width='2'/><path d='M 5 50 Q 50 70 95 50' fill='none' stroke='%23FFFFFF' stroke-width='2'/><line x1='50' y1='5' x2='50' y2='95' stroke='%23FFFFFF' stroke-width='2'/></svg>">
-    <link rel="icon" type="image/png" sizes="32x32" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%23500000' stroke='%23FFFFFF' stroke-width='2'/><ellipse cx='50' cy='50' rx='45' ry='20' fill='none' stroke='%23FFFFFF' stroke-width='2'/><path d='M 5 50 Q 50 30 95 50' fill='none' stroke='%23FFFFFF' stroke-width='2'/><path d='M 5 50 Q 50 70 95 50' fill='none' stroke='%23FFFFFF' stroke-width='2'/><line x1='50' y1='5' x2='50' y2='95' stroke='%23FFFFFF' stroke-width='2'/></svg>">
-    <link rel="icon" type="image/png" sizes="16x16" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%23500000' stroke='%23FFFFFF' stroke-width='2'/><ellipse cx='50' cy='50' rx='45' ry='20' fill='none' stroke='%23FFFFFF' stroke-width='2'/><path d='M 5 50 Q 50 30 95 50' fill='none' stroke='%23FFFFFF' stroke-width='2'/><path d='M 5 50 Q 50 70 95 50' fill='none' stroke='%23FFFFFF' stroke-width='2'/><line x1='50' y1='5' x2='50' y2='95' stroke='%23FFFFFF' stroke-width='2'/></svg>">
     
     <!-- Stylesheets -->
     <!-- Critical Inline CSS for Faster Initial Render -->
@@ -319,6 +232,36 @@
         .profile-photo { width: 200px; height: 200px; border-radius: 50%; object-fit: cover; margin: 0 auto 1.5rem; display: block; }
         img { max-width: 100%; height: auto; }
         
+        /* Device-specific display controls */
+        #desktop-content { display: none; }
+        #mobile-content { display: none; }
+        
+        /* Mobile-First CSS Variables */
+        :root {
+            --tamu-maroon: #500000;
+            --tamu-white: #FFFFFF;
+            --tamu-dark: #202020;
+            --tamu-medium: #3E3E3E;
+            --tamu-light: #707070;
+            --tamu-lighter: #D1D1D1;
+            --tamu-dark-maroon: #3C0000;
+            --tamu-light-maroon: #732F2F;
+            
+            --bg-primary: var(--tamu-white);
+            --bg-secondary: #f8f8f8;
+            --bg-card: var(--tamu-white);
+            --bg-hover: #f0f0f0;
+            --text-primary: var(--tamu-dark);
+            --text-secondary: var(--tamu-medium);
+            --accent-primary: var(--tamu-maroon);
+            --accent-hover: var(--tamu-dark-maroon);
+            --border-color: var(--tamu-lighter);
+            
+            --font-mono: 'JetBrains Mono', 'SF Mono', 'Consolas', 'Monaco', monospace;
+            --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+            --shadow-sm: 0 2px 4px rgba(0,0,0,0.1);
+            --shadow-md: 0 4px 8px rgba(0,0,0,0.15);
+        }
     </style>
     
     <!-- Preload CSS -->
@@ -328,403 +271,1702 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
     
-    <!-- Enhanced JSON-LD Structured Data for Google Knowledge Panel -->
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": ["Person", "Researcher"],
-        "name": "Mohamed Rayan Barhdadi",
-        "givenName": "Mohamed Rayan",
-        "familyName": "Barhdadi",
-        "additionalName": ["Rayan", "BM Rayan"],
-        "alternateName": ["M Rayan Barhdadi", "BM Rayan", "BM Rayane", "B M Rayan", "B M Rayane", "BMR Rayan", "Rayan Barhdadi", "Mohammad Rayan Barhdadi", "Mohammed Rayan Barhdadi", "Mohamed Rayane Barhdadi", "Mohammad Rayane Barhdadi", "Rayane Barhdadi", "Rayan Baghdadi", "Rayane Baghdadi", "Mohamed Barhdadi", "Mohammad Barhdadi", "Mohammed Barhdadi", "M. Rayan Barhdadi", "M.R. Barhdadi", "MR Barhdadi"],
-        "url": "https://bmrayan.com/",
-        "mainEntityOfPage": "https://bmrayan.com/",
-        "image": [
-            "https://bmrayan.com/photos/Light HS25.jpg",
-            "https://bmrayan.com/photos/MAINPIC.jpeg",
-            "https://bmrayan.com/photos/poster.jpg"
-        ],
-        "sameAs": [
-            "https://scholar.google.com/citations?user=G7qjc6kAAAAJ&hl=en&oi=ao",
-            "https://github.com/BMRayan/",
-            "https://www.linkedin.com/in/bmrayan/",
-            "https://twitter.com/MRBarhdadi",
-            "https://orcid.org/0000-0000-0000-0000",
-            "https://www.researchgate.net/profile/Mohamed-Rayan-Barhdadi",
-            "https://bmrayan.com/blog.html"
-        ],
-        "jobTitle": ["Researcher", "Electrical Engineering Student", "Research Assistant"],
-        "hasOccupation": {
-            "@type": "Occupation",
-            "name": "Researcher",
-            "occupationLocation": {
-                "@type": "Place",
-                "name": "Qatar"
+    <!-- Mobile-Specific Styles -->
+    <style>
+        /* Mobile-First CSS */
+        body.mobile-version {
+            font-family: var(--font-mono);
+            font-size: 14px;
+            line-height: 1.6;
+            letter-spacing: -0.02em;
+            color: var(--text-primary);
+            background: var(--bg-primary);
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            text-rendering: optimizeLegibility;
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-touch-callout: none;
+        }
+        
+        /* Grid Pattern Background - same as desktop */
+        body.mobile-version::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(80, 0, 0, 0.08) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(80, 0, 0, 0.08) 1px, transparent 1px);
+            background-size: 20px 20px;
+            pointer-events: none;
+            z-index: 0;
+            will-change: auto;
+            transform: translateZ(0);
+            backface-visibility: hidden;
+        }
+        
+        /* Fixed Mobile Header */
+        .mobile-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: var(--bg-primary);
+            box-shadow: 0 2px 4px rgba(80, 0, 0, 0.08);
+            z-index: 1000;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 0 20px;
+            gap: 20px;
+        }
+        
+        .header-title {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--accent-primary);
+            letter-spacing: -0.02em;
+        }
+        
+        /* Hamburger Menu */
+        .menu-toggle {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: var(--bg-primary);
+            border: 1px solid var(--accent-primary);
+            border-radius: 50%;
+            cursor: pointer;
+            padding: 0;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.2s ease,
+                        box-shadow 0.2s ease,
+                        background-color 0.2s ease,
+                        border-color 0.2s ease;
+            box-shadow: 0 1px 3px rgba(80, 0, 0, 0.12),
+                        0 0 8px rgba(80, 0, 0, 0.08);
+        }
+        
+        .menu-toggle::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(80, 0, 0, 0.1);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.4s ease, height 0.4s ease;
+            pointer-events: none;
+        }
+        
+        .menu-toggle:hover {
+            background: var(--accent-primary);
+            border-color: var(--accent-primary);
+            transform: translateY(-2px);
+            box-shadow: 0 2px 8px rgba(80, 0, 0, 0.2),
+                        0 0 15px rgba(80, 0, 0, 0.15);
+        }
+        
+        .menu-toggle:hover::before {
+            width: 100px;
+            height: 100px;
+        }
+        
+        .menu-toggle:hover span {
+            background: white;
+        }
+        
+        .menu-toggle:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 4px rgba(80, 0, 0, 0.1);
+        }
+        
+        .menu-toggle span {
+            width: 18px;
+            height: 2px;
+            background: var(--text-primary);
+            margin: 2.5px 0;
+            transition: all 0.3s ease;
+            display: block;
+            position: relative;
+            pointer-events: none;
+        }
+        
+        .menu-toggle.active {
+            background: var(--accent-primary);
+            border-color: var(--accent-primary);
+            animation: pulse 0.5s ease;
+            box-shadow: 0 2px 8px rgba(80, 0, 0, 0.25),
+                        0 0 20px rgba(80, 0, 0, 0.2);
+        }
+        
+        .menu-toggle.active span {
+            background: white;
+        }
+        
+        .menu-toggle.active span:nth-child(1) {
+            transform: rotate(-45deg) translate(-4px, 4px);
+        }
+        
+        .menu-toggle.active span:nth-child(2) {
+            opacity: 0;
+            transform: scale(0);
+        }
+        
+        .menu-toggle.active span:nth-child(3) {
+            transform: rotate(45deg) translate(-4px, -4px);
+        }
+        
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(80, 0, 0, 0.2);
             }
-        },
-        "worksFor": [
-            {
-                "@type": "EducationalOrganization",
-                "name": "Texas A&M University Qatar",
-                "url": "https://www.qatar.tamu.edu/",
-                "address": {
-                    "@type": "PostalAddress",
-                    "addressCountry": "Qatar",
-                    "addressLocality": "Doha"
-                }
-            },
-            {
-                "@type": "ResearchOrganization",
-                "name": "Qatar Computing Research Institute",
-                "url": "https://www.hbku.edu.qa/en/qcri"
+            50% {
+                box-shadow: 0 0 0 8px rgba(80, 0, 0, 0);
             }
-        ],
-        "alumniOf": {
-            "@type": "EducationalOrganization",
-            "name": "Texas A&M University Qatar",
-            "url": "https://www.qatar.tamu.edu/"
-        },
-        "knowsAbout": [
-            "3D Computer Vision",
-            "Physics-Informed Neural Networks",
-            "AI for Social Good",
-            "Machine Learning",
-            "Deep Learning",
-            "Neural Radiance Fields",
-            "Electrical Engineering",
-            "Interdisciplinary ML Research",
-            "Neural Networks",
-            "Artificial Intelligence",
-            "Transformer Diagnostics",
-            "Sparse-view 3D Reconstruction"
-        ],
-        "hasCredential": [
-            {
-                "@type": "EducationalOccupationalCredential",
-                "name": "Bachelor of Science in Electrical Engineering",
-                "credentialCategory": "degree",
-                "educationalLevel": "undergraduate"
+            100% {
+                box-shadow: 0 0 0 0 rgba(80, 0, 0, 0);
             }
-        ],
-        "award": [
-            "ICML 2025 Workshop Paper Acceptance",
-            "CIGRE 2025 Conference Paper Acceptance", 
-            "Best Poster Award - HBKU-TAMU Undergraduate Research Retreat",
-            "1st Place Globally - Invent for the Planet Competition",
-            "Qatar Foundation Technology Pitch Competition Winner",
-            "UREP Grant - Qatar Research Council",
-            "Undergraduate Research Scholars Program"
-        ],
-        "description": "Mohamed Rayan Barhdadi is an Electrical Engineering researcher and student at Texas A&M University Qatar, specializing in 3D Computer Vision, Physics-Informed Neural Networks, and AI for Social Good. His research focuses on neural 3D reconstruction and sparse-view reconstruction using physical constraints.",
-        "email": "rayan.barhdadi@tamu.edu",
-        "telephone": "+974-XXXX-XXXX",
-        "address": {
-            "@type": "PostalAddress",
-            "addressCountry": "Qatar",
-            "addressLocality": "Doha"
-        },
-        "nationality": {
-            "@type": "Country",
-            "name": "Morocco"
-        },
-        "birthPlace": {
-            "@type": "Place",
-            "name": "Morocco"
-        },
-        "affiliation": [
-            {
-                "@type": "Organization",
-                "name": "Texas A&M University Qatar"
-            },
-            {
-                "@type": "Organization", 
-                "name": "Qatar Computing Research Institute"
-            },
-            {
-                "@type": "Organization",
-                "name": "SLB Qatar"
-            }
-        ],
-        "memberOf": [
-            {
-                "@type": "Organization",
-                "name": "IEEE"
-            },
-            {
-                "@type": "Organization",
-                "name": "ICML Community"
-            }
-        ],
-        "interestIn": [
-            "3D Computer Vision",
-            "Machine Learning",
-            "Mountain Climbing",
-            "Adventure Travel",
-            "Ultra-Marathon Running",
-            "Research Innovation"
-        ],
-        "publishingPrinciples": "https://bmrayan.com/",
-        "seeks": "Research Collaboration Opportunities"
-    }
-    </script>
+        }
+        
+        /* Mobile Navigation Drawer */
+        .mobile-nav {
+            position: fixed;
+            top: 60px;
+            left: -100%;
+            width: 80%;
+            max-width: 300px;
+            height: calc(100vh - 60px);
+            background: var(--bg-primary);
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+            transition: left 0.3s ease;
+            z-index: 999;
+            overflow-y: auto;
+        }
+        
+        .mobile-nav.active {
+            left: 0;
+        }
+        
+        .mobile-nav a {
+            display: block;
+            padding: 16px 20px;
+            color: var(--text-primary);
+            text-decoration: none;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 16px;
+            min-height: 48px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .mobile-nav a:active {
+            background: var(--bg-secondary);
+        }
+        
+        /* Overlay */
+        .nav-overlay {
+            position: fixed;
+            top: 60px;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease;
+            z-index: 998;
+        }
+        
+        .nav-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        /* Main Content */
+        .mobile-main-content {
+            padding-top: 60px;
+            min-height: 100vh;
+        }
+        
+        /* Hero Section - styled like desktop */
+        .hero-section {
+            margin: 20px 20px 20px;
+            padding: 1.5rem 1.25rem;
+            text-align: left;
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            box-shadow: 0 2px 8px rgba(80, 0, 0, 0.08),
+                        0 1px 3px rgba(80, 0, 0, 0.04);
+            position: relative;
+            z-index: 1;
+            overflow: hidden;
+            transition: box-shadow 0.3s ease;
+        }
+        
+        .hero-section:hover {
+            box-shadow: 0 4px 12px rgba(80, 0, 0, 0.12),
+                        0 2px 4px rgba(80, 0, 0, 0.06);
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: -1px;
+            left: -1px;
+            width: 60px;
+            height: 60px;
+            background: transparent;
+            border-top: 4px solid var(--accent-primary);
+            border-left: 4px solid var(--accent-primary);
+            border-radius: 16px 0 0 0;
+            z-index: 2;
+        }
+        
+        .profile-image {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            margin: 0 0 1rem 0.5rem;
+            display: block;
+            border: 3px solid rgba(80, 0, 0, 0.3);
+            box-shadow: 0 4px 12px rgba(80, 0, 0, 0.1);
+            object-fit: cover;
+            object-position: center center;
+        }
+        
+        .hero-name {
+            font-size: 2rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--text-primary);
+            margin-bottom: 0.6rem;
+            line-height: 1.2;
+            text-align: left;
+            padding: 0 0.5rem;
+        }
+        
+        .hero-title {
+            font-size: 1.1rem;
+            color: var(--accent-primary);
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            text-align: left;
+            padding: 0 0.5rem;
+        }
+        
+        .hero-affiliation {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+            line-height: 1.4;
+            text-align: left;
+            padding: 0 0.5rem;
+        }
+        
+        .hero-affiliation a {
+            color: var(--accent-primary);
+            text-decoration: none;
+        }
+        
+        /* Social Links Grid - 3x2 layout */
+        .social-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.5rem;
+            padding: 0 0.5rem;
+        }
+        
+        .social-link {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.6rem 0.85rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background: var(--bg-card);
+            color: var(--text-primary);
+            text-decoration: none;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                        box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                        border-color 0.3s ease,
+                        background 0.3s ease;
+            font-size: 0.85rem;
+            box-shadow: 0 1px 3px rgba(80, 0, 0, 0.06),
+                        0 0 2px rgba(80, 0, 0, 0.03);
+            line-height: 1.3;
+            min-height: 42px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .social-link:hover {
+            background: var(--bg-hover);
+            border-color: var(--accent-primary);
+            color: var(--accent-primary);
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 3px 10px rgba(80, 0, 0, 0.1);
+        }
+        
+        .social-link:active {
+            transform: scale(0.98);
+        }
+        
+        .social-link i {
+            font-size: 1rem;
+            width: 18px;
+            color: var(--accent-primary);
+            text-align: center;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .social-link:hover i {
+            transform: scale(1.15) rotate(8deg);
+            color: var(--accent-hover);
+        }
+        
+        .social-link span {
+            font-size: 0.8rem;
+            flex: 1;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .social-link:hover span {
+            transform: translateX(3px);
+            font-weight: 600;
+        }
+        
+        /* Content Sections - styled like desktop */
+        .mobile-section {
+            margin: 20px;
+            padding: 25px 20px 30px;
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            box-shadow: 0 2px 8px rgba(80, 0, 0, 0.08),
+                        0 1px 3px rgba(80, 0, 0, 0.04);
+            position: relative;
+            z-index: 1;
+            overflow: hidden;
+            transition: box-shadow 0.3s ease;
+        }
+        
+        .mobile-section:hover {
+            box-shadow: 0 4px 12px rgba(80, 0, 0, 0.12),
+                        0 2px 4px rgba(80, 0, 0, 0.06);
+        }
+
+        .mobile-section::before {
+            content: '';
+            position: absolute;
+            top: -1px;
+            left: -1px;
+            width: 60px;
+            height: 60px;
+            background: transparent;
+            border-top: 4px solid var(--accent-primary);
+            border-left: 4px solid var(--accent-primary);
+            border-radius: 16px 0 0 0;
+            z-index: 2;
+        }
+        
+        .mobile-section h2 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-top: -0.5rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--border-color);
+            text-transform: uppercase;
+            letter-spacing: -0.03em;
+            position: relative;
+        }
+        
+        .mobile-section h2::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            width: 60px;
+            height: 2px;
+            background: var(--accent-primary);
+        }
+        
+        .mobile-section p {
+            font-size: 14px;
+            line-height: 1.7;
+            margin-bottom: 16px;
+            text-align: justify;
+        }
+        
+        /* News Section - styled like desktop with scroll */
+        .news-container {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            max-height: 300px;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+        
+        /* Custom scrollbar for news */
+        .news-container::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .news-container::-webkit-scrollbar-track {
+            background: var(--bg-secondary);
+            border-radius: 3px;
+        }
+        
+        .news-container::-webkit-scrollbar-thumb {
+            background: var(--tamu-lighter);
+            border-radius: 3px;
+        }
+        
+        .news-container::-webkit-scrollbar-thumb:hover {
+            background: var(--tamu-light);
+        }
+        
+        .news-item {
+            display: flex;
+            align-items: start;
+            margin-bottom: 12px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .news-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+        
+        .news-date {
+            font-size: 12px;
+            color: var(--text-secondary);
+            min-width: 60px;
+            margin-right: 12px;
+            padding-top: 2px;
+        }
+        
+        .news-text {
+            font-size: 14px;
+            flex: 1;
+            line-height: 1.5;
+        }
+        
+        /* Publication Cards - styled like desktop */
+        .publication-card {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 1px 4px rgba(80, 0, 0, 0.08),
+                        0 0 2px rgba(80, 0, 0, 0.04);
+            transition: all 0.3s ease;
+        }
+        
+        .publication-card:hover {
+            box-shadow: 0 4px 12px rgba(80, 0, 0, 0.12),
+                        0 2px 4px rgba(80, 0, 0, 0.06);
+            transform: translateY(-2px);
+        }
+        
+        .pub-image-mobile {
+            width: 100%;
+            height: auto;
+            border-radius: 4px;
+            margin-bottom: 12px;
+        }
+        
+        .pub-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+            line-height: 1.4;
+        }
+        
+        .pub-authors {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+        
+        .author-me {
+            font-weight: 600;
+            color: var(--accent-primary);
+        }
+        
+        .pub-venue {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: 12px;
+        }
+        
+        .venue-name {
+            display: block;
+            margin-bottom: 8px;
+            line-height: 1.4;
+        }
+        
+        .pub-status {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-top: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+        }
+        
+        .pub-status.accepted {
+            background: rgba(34, 197, 94, 0.1);
+            color: #16a34a;
+            border: 1px solid rgba(34, 197, 94, 0.3);
+        }
+        
+        .pub-status.review {
+            background: rgba(251, 191, 36, 0.1);
+            color: #fbbf24;
+            border: 1px solid rgba(251, 191, 36, 0.3);
+        }
+        
+        /* Publication Links */
+        .pub-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        
+        .pub-link-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            padding: 0.35rem 0.7rem;
+            margin: 0.25rem;
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            color: var(--text-primary);
+            font-size: 0.75rem;
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.2s ease,
+                        box-shadow 0.2s ease,
+                        background-color 0.2s ease,
+                        border-color 0.2s ease,
+                        color 0.2s ease;
+        }
+
+        .pub-link-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(80, 0, 0, 0.1);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.4s ease, height 0.4s ease;
+        }
+
+        .pub-link-btn:active {
+            background: var(--accent-primary);
+            border-color: var(--accent-primary);
+            color: white;
+            transform: translate3d(0, -2px, 0);
+            box-shadow: 0 2px 8px rgba(80, 0, 0, 0.15);
+        }
+
+        .pub-link-btn:active::before {
+            width: 100px;
+            height: 100px;
+        }
+
+        .pub-link-btn i {
+            font-size: 0.9rem;
+        }
+        
+        /* Experience Items - styled like desktop */
+        .experience-item {
+            display: flex;
+            gap: 1rem;
+            padding: 20px;
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 1px 4px rgba(80, 0, 0, 0.08),
+                        0 0 2px rgba(80, 0, 0, 0.04);
+            transition: all 0.3s ease;
+        }
+        
+        .experience-item:hover {
+            box-shadow: 0 4px 12px rgba(80, 0, 0, 0.12),
+                        0 2px 4px rgba(80, 0, 0, 0.06);
+            transform: translateY(-2px);
+        }
+        
+        .exp-logo {
+            width: 60px;
+            height: 60px;
+            object-fit: contain;
+            flex-shrink: 0;
+            border-radius: 8px;
+            padding: 8px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            margin-right: 0.5rem;
+        }
+        
+        .kurban-lab-logo {
+            background: var(--bg-secondary);
+            padding: 10px;
+            width: 59px;
+            height: 59px;
+        }
+        
+        .slb-logo {
+            width: 60px;
+            height: 60px;
+            padding: 4px;
+        }
+        
+        .qcri-logo {
+            width: 67px;
+            height: 67px;
+            padding: 7px;
+        }
+        
+        .tamu-logo {
+            width: 58px;
+            height: 58px;
+            padding: 9px;
+        }
+        
+        .exp-content {
+            flex: 1;
+            min-width: 0;
+        }
+        
+        .exp-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 8px;
+        }
+        
+        .exp-header h3 {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+            flex: 1;
+            margin: 0;
+            line-height: 1.6;
+        }
+        
+        .exp-date {
+            font-size: 12px;
+            color: var(--text-secondary);
+            white-space: normal;
+            line-height: 1.3;
+            margin-top: 8px;
+            text-align: right;
+            max-width: 80px;
+        }
+        
+        .exp-details {
+            font-size: 14px;
+        }
+        
+        .exp-details p {
+            margin: 0;
+        }
+        
+        p.exp-org {
+            color: var(--accent-primary);
+            margin: 0 0 8px 0 !important;
+            font-weight: 500;
+        }
+        
+        p.exp-advisor {
+            color: var(--text-secondary);
+            margin: 0 0 8px 0 !important;
+            font-size: 13px;
+        }
+        
+        p.exp-desc {
+            line-height: 1.5;
+            color: var(--text-secondary);
+            text-align: justify;
+            margin: 0 !important;
+        }
+        
+        .cv-note {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            font-weight: 400;
+            font-style: italic;
+        }
+        
+        /* Hobbies Gallery */
+        .hobbies-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            max-width: 100%;
+            margin: 0;
+        }
+        
+        .hobby-card {
+            position: relative;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(80, 0, 0, 0.1),
+                        0 1px 3px rgba(80, 0, 0, 0.05);
+            aspect-ratio: 1/1;
+            transition: box-shadow 0.3s ease, transform 0.3s ease;
+        }
+        
+        .hobby-card:hover {
+            box-shadow: 0 4px 16px rgba(80, 0, 0, 0.15),
+                        0 2px 6px rgba(80, 0, 0, 0.08);
+            transform: translateY(-2px);
+        }
+        
+        .hobby-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .hobby-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(80,0,0,0.9), transparent);
+            color: white;
+            padding: 8px 10px;
+        }
+        
+        .hobby-title {
+            font-size: 11px;
+            font-weight: 600;
+            margin-bottom: 2px;
+            line-height: 1.2;
+        }
+        
+        .hobby-subtitle {
+            font-size: 10px;
+            opacity: 0.9;
+            line-height: 1.2;
+        }
+        
+        /* Journal Section - styled like desktop */
+        #journal {
+            padding-bottom: 20px;
+        }
+        
+        .journal-text {
+            font-size: 14px;
+            line-height: 1.7;
+            text-align: justify;
+            margin-bottom: 0;
+        }
+        
+        .journal-link {
+            color: var(--accent-primary);
+            text-decoration: none;
+            border-bottom: 1px dotted var(--accent-primary);
+            transition: all 0.3s ease;
+        }
+        
+        .journal-link:hover {
+            border-bottom-style: solid;
+        }
+        
+        /* Contact Section - styled like desktop */
+        #contact {
+            margin-bottom: 33px;
+        }
+        
+        .contact-content {
+            max-width: 100%;
+        }
+        
+        .contact-intro {
+            font-size: 14px;
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+            text-align: justify;
+        }
+        
+        .contact-info {
+            display: flex;
+            justify-content: flex-start;
+        }
+        
+        .email-container {
+            /* No box styling - direct display */
+        }
+        
+        .email-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 14px;
+        }
+        
+        .email-item i {
+            color: var(--accent-primary);
+            font-size: 16px;
+        }
+        
+        .email-item a {
+            color: var(--text-primary);
+            text-decoration: none;
+            border-bottom: 1px dotted var(--accent-primary);
+            transition: all 0.3s ease;
+        }
+        
+        .email-item a:hover {
+            color: var(--accent-primary);
+            border-bottom-style: solid;
+        }
+        
+        /* Footer - styled like desktop */
+        .mobile-footer {
+            text-align: center;
+            padding: 0 1rem 1rem;
+            margin-top: -1.1rem;
+            position: relative;
+        }
+        
+        .mobile-footer p {
+            display: inline-block;
+            background: white;
+            color: var(--accent-primary);
+            padding: 0.3rem 1rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            margin: 0;
+            border: 1px solid rgba(80, 0, 0, 0.5);
+            box-shadow: 0 2px 8px rgba(80, 0, 0, 0.1);
+        }
+        
+        /* Modal for BibTeX */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            padding: 20px;
+        }
+        
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal-content {
+            background: var(--bg-primary);
+            border-radius: 8px;
+            max-width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+        }
+        
+        .modal-header {
+            padding: 16px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .modal-title {
+            font-size: 18px;
+            font-weight: 600;
+        }
+        
+        .modal-close {
+            width: 32px;
+            height: 32px;
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal-body {
+            padding: 16px;
+        }
+        
+        .bibtex-code {
+            background: var(--bg-secondary);
+            padding: 12px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 12px;
+            overflow-x: auto;
+            margin: 12px 0;
+        }
+        
+        .copy-btn {
+            width: 100%;
+            padding: 12px;
+            background: var(--accent-primary);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 14px;
+            cursor: pointer;
+            min-height: 44px;
+        }
+        
+        .copy-btn:active {
+            transform: scale(0.98);
+        }
+        
+        /* Loading State */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid var(--tamu-lighter);
+            border-radius: 50%;
+            border-top-color: var(--accent-primary);
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* Prevent zoom on input focus */
+        input, textarea, select {
+            font-size: 16px !important;
+        }
+        
+        /* About Section Styles */
+        .about-content {
+            margin-bottom: 1.5rem;
+        }
+        
+        .about-text p {
+            margin-bottom: 1rem;
+        }
+        
+        .about-text a {
+            color: var(--accent-primary);
+            text-decoration: none;
+            border-bottom: 1px dotted var(--accent-primary);
+        }
+        
+        .about-text a:hover {
+            border-bottom-style: solid;
+        }
+        
+        .about-images {
+            display: grid;
+            grid-template-columns: 0.95fr 1.6fr;
+            gap: 1rem;
+            margin-top: 1.5rem;
+            align-items: start;
+        }
+        
+        .about-photo {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(80, 0, 0, 0.08),
+                        0 1px 2px rgba(80, 0, 0, 0.04);
+            border: 1px solid var(--border-color);
+        }
+        
+        .research-philosophy {
+            margin-top: 1.5rem;
+            padding-top: 0.5rem;
+        }
+        
+        .philosophy-divider {
+            border: none;
+            border-top: 2px solid var(--accent-primary);
+            margin: 0 auto 1.5rem;
+            width: 60%;
+        }
+        
+        .philosophy-text {
+            font-style: italic;
+            color: var(--text-secondary);
+            text-align: center;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+        
+        /* Smooth scroll */
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        /* Hide scrollbar for nav drawer */
+        .mobile-nav::-webkit-scrollbar {
+            width: 0;
+        }
+    </style>
 </head>
 <body>
-    <div class="layout-wrapper">
-        <!-- ============================================ -->
-        <!-- SIDEBAR - Profile and Navigation -->
-        <!-- ============================================ -->
-        <aside class="sidebar">
-            <div class="sidebar-content">
-                <!-- Profile Section -->
-                <div class="sidebar-profile">
-                    <img src="assets/images/photos/Light HS25.jpg" alt="Mohamed Rayan Barhdadi" class="profile-photo" loading="eager" fetchpriority="high">
-                    <h1 class="name">Mohamed Rayan<br>Barhdadi</h1>
-                    <!-- SEO: Hidden text with name variations for better search indexing -->
-                    <span style="position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden;">
-                        Mohammad Rayan Barhdadi, Mohammed Rayan Barhdadi, Mohamed Rayane Barhdadi, Mohammad Rayane Barhdadi, 
-                        Rayane Barhdadi, Rayan Baghdadi, Rayane Baghdadi, M. Rayan Barhdadi, M.R. Barhdadi, MR Barhdadi,
-                        BM Rayan, BM Rayane, B M Rayan, B M Rayane, BMR Rayan
-                    </span>
-                    <p class="title">Researcher, Learner, Artist</p>
-                    <p class="affiliation">Electrical Engineering<br><a href="https://www.qatar.tamu.edu/" target="_blank" class="tamuq-link">Texas A&M University</a></p>
+    <!-- DESKTOP CONTENT -->
+    <div id="desktop-content" style="display: none;">
+        <div class="layout-wrapper">
+            <!-- ============================================ -->
+            <!-- SIDEBAR - Profile and Navigation -->
+            <!-- ============================================ -->
+            <aside class="sidebar">
+                <div class="sidebar-content">
+                    <!-- Profile Section -->
+                    <div class="sidebar-profile">
+                        <img src="assets/images/photos/Light HS25.jpg" alt="Mohamed Rayan Barhdadi" class="profile-photo" loading="eager" fetchpriority="high">
+                        <h1 class="name">Mohamed Rayan<br>Barhdadi</h1>
+                        <!-- SEO: Hidden text with name variations for better search indexing -->
+                        <span style="position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden;">
+                            Mohammad Rayan Barhdadi, Mohammed Rayan Barhdadi, Mohamed Rayane Barhdadi, Mohammad Rayane Barhdadi, 
+                            Rayane Barhdadi, Rayan Baghdadi, Rayane Baghdadi, M. Rayan Barhdadi, M.R. Barhdadi, MR Barhdadi,
+                            BM Rayan, BM Rayane, B M Rayan, B M Rayane, BMR Rayan
+                        </span>
+                        <p class="title">Researcher, Learner, Artist</p>
+                        <p class="affiliation">Electrical Engineering<br><a href="https://www.qatar.tamu.edu/" target="_blank" class="tamuq-link">Texas A&M University</a></p>
+                    </div>
+                    
+                    <!-- Social Links -->
+                    <div class="sidebar-socials">
+                        <a href="mailto:rayan.barhdadi@tamu.edu" class="social-item" title="Email">
+                            <i class="fas fa-envelope"></i>
+                            <span>Email</span>
+                        </a>
+                        <a href="https://scholar.google.com/citations?user=G7qjc6kAAAAJ&hl=en&oi=ao" class="social-item" target="_blank" title="Google Scholar">
+                            <i class="ai ai-google-scholar"></i>
+                            <span>Scholar</span>
+                        </a>
+                        <a href="https://github.com/BMRayan/" class="social-item" target="_blank" title="GitHub">
+                            <i class="fab fa-github"></i>
+                            <span>GitHub</span>
+                        </a>
+                        <a href="https://www.linkedin.com/in/bmrayan/" class="social-item" target="_blank" title="LinkedIn">
+                            <i class="fab fa-linkedin"></i>
+                            <span>LinkedIn</span>
+                        </a>
+                        <a href="https://twitter.com/MRBarhdadi" class="social-item" target="_blank" title="Twitter">
+                            <i class="fab fa-twitter"></i>
+                            <span>Twitter</span>
+                        </a>
+                        <a href="CVs/CV_ICML.pdf" class="social-item" target="_blank" title="Download CV">
+                            <i class="fas fa-file-pdf"></i>
+                            <span>CV (PDF)</span>
+                        </a>
+                    </div>
+                    
+                    <!-- Recent News in Sidebar -->
+                    <div class="sidebar-news">
+                        <h3 class="sidebar-section-title">Recent News</h3>
+                        <div class="sidebar-news-list">
+                            <div class="sidebar-news-item">
+                                <span class="news-date">Jul 2025</span>
+                                <span class="news-text">Paper accepted at <strong>ICML 2025</strong> Workshop</span>
+                            </div>
+                            <div class="sidebar-news-item">
+                                <span class="news-date">Jun 2025</span>
+                                <span class="news-text">Started internship at <strong>SLB Qatar</strong></span>
+                            </div>
+                            <div class="sidebar-news-item">
+                                <span class="news-date">May 2025</span>
+                                <span class="news-text">Joined <strong>QCRI</strong> as Research Intern</span>
+                            </div>
+                            <div class="sidebar-news-item">
+                                <span class="news-date">Feb 2025</span>
+                                <span class="news-text">🏆 <strong>1st Place</strong> - Invent for the Planet</span>
+                            </div>
+                            <div class="sidebar-news-item">
+                                <span class="news-date">Feb 2025</span>
+                                <span class="news-text">🏆 <strong>Best Poster</strong> - HBKU-TAMU Research</span>
+                            </div>
+                            <div class="sidebar-news-item">
+                                <span class="news-date">Jan 2025</span>
+                                <span class="news-text">Selected for <strong>UG Research Scholars</strong></span>
+                            </div>
+                            <div class="sidebar-news-item">
+                                <span class="news-date">Oct 2024</span>
+                                <span class="news-text">🏆 Won <strong>QF Tech Pitch</strong> ($11,000)</span>
+                            </div>
+                            <div class="sidebar-news-item">
+                                <span class="news-date">Aug 2024</span>
+                                <span class="news-text">Awarded <strong>UREP Grant</strong> by Qatar Research</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
+            </aside>
+            
+            <!-- ============================================ -->
+            <!-- MAIN CONTENT AREA -->
+            <!-- ============================================ -->
+            <div class="main-container">
+                <!-- Top Header Bar -->
+                <header class="top-header">
+                    <div class="header-content">
+                        <!-- Navigation -->
+                        <nav class="top-nav">
+                            <a href="#about" class="nav-link current-section">About</a>
+                            <a href="#publications" class="nav-link">Publications</a>
+                            <a href="#experience" class="nav-link">Experience</a>
+                            <a href="#hobbies" class="nav-link">Hobbies</a>
+                            <a href="#journal" class="nav-link">Journal</a>
+                            <a href="#contact" class="nav-link">Contact</a>
+                        </nav>
+                    </div>
+                </header>
+                
+                <main class="main-content">
+                <!-- ============================================ -->
+                <!-- ABOUT SECTION -->
+                <!-- ============================================ -->
+                <section id="about" class="section">
+                    <h2>About Me</h2>
+                    <div class="about-content">
+                        <div class="about-text">
+                            <p>
+                        I'm Mohamed Rayan Barhdadi, a third-year Electrical Engineering student and researcher at <a href="https://www.qatar.tamu.edu/" target="_blank">Texas A&M University</a>, where I also pursue a minor in Mathematics. My research focuses on machine learning and computer vision, particularly 3D computer vision and AI for social good, though I remain open to exploring interdisciplinary domains where ML can create meaningful impact. I have published my research at top-tier venues including ICML 2025 and have work currently under review at NeurIPS 2025, and I'm fortunate to work as a Student Researcher at the <a href="https://kurbanintelligencelab.com/" target="_blank">Kurban Intelligence Lab</a>.
+                    </p>
+                    <p>
+                        <strong>PhysicsNeRF:</strong> I developed <a href="https://arxiv.org/abs/2505.23481" target="_blank">PhysicsNeRF</a>, a physics-guided framework that integrates physical constraints into neural radiance fields for 3D reconstruction from sparse views—achieving 21.4 dB PSNR using only 8 input images. This work, accepted at ICML 2025 Building Physically Plausible World Models, addresses fundamental challenges in sparse view 3D reconstruction with applications in robotics, autonomous systems, medicine, and virtual reality.
+                    </p>
+                    <p>
+                        <strong>EMPATHIA:</strong> I created <a href="https://kurbanintelligencelab.github.io/empathia/" target="_blank">EMPATHIA</a>, a multi-agent AI framework for refugee integration that employs emotional, cultural, and ethical reasoning agents to make transparent, explainable, value-aligned reasoning for integration decisions. This human-AI collaborative system, under review at NeurIPS 2025 Creative AI track, demonstrates how AI can preserve human dignity when machines participate in life-altering decisions.
+                    </p>
+                    <p>
+                        I have the chance to work under the supervision and collaborate with: <a href="https://www.hasankurban.com/" target="_blank">Dr. Hasan Kurban</a> and <a href="https://engineering.tamu.edu/electrical/profiles/eserpedin.html" target="_blank">Dr. Erchin Serpedin</a> on AI for social good, <a href="https://www.hasankurban.com/" target="_blank">Dr. Hasan Kurban</a> and <a href="https://ieeexplore.ieee.org/author/37269837800" target="_blank">Dr. Hussein Alnuweiri</a> on 3D neural rendering, and <a href="https://www.hbku.edu.qa/en/staff/dr-halima-bensmail" target="_blank">Dr. Halima Bensmail</a> & <a href="https://www.hbku.edu.qa/en/staff/dr-micha%C3%ABl-aupetit" target="_blank">Dr. Michael Aupetit</a> at QCRI on clustering algorithms.
+                    </p>
+                        </div>
+                        <div class="about-images">
+                            <img src="assets/images/photos/MAINPIC.jpeg" alt="Mohamed Rayan Barhdadi" class="about-photo" loading="eager">
+                            <img src="assets/images/photos/poster.jpg" alt="Research Poster" class="about-photo" loading="eager">
+                        </div>
+                    </div>
+                    <div class="research-philosophy">
+                        <hr class="philosophy-divider">
+                        <p class="philosophy-text"><em>Research and Life Philosophy: I'm passionate about creating work that makes a real difference<br>through genuine insight rather than optimizing numbers. I follow research questions wherever they lead,<br>as long as they advance scientific understanding and benefit society.</em></p>
+                    </div>
+                </section>
+
+
+                <!-- ============================================ -->
+                <!-- PUBLICATIONS SECTION -->
+                <!-- Each publication has:
+                <!-- - Image/GIF on the left (pubphoto.gif placeholder)
+                <!-- - Title, authors, venue, status
+                <!-- - Links: Paper, Poster, Code, Dataset, Video, Project Website, BibTeX
+                <!-- Update the href="#" with actual links when available
+                <!-- ============================================ -->
+                <section id="publications" class="section">
+                    <h2>Publications</h2>
+                    
+                    <!-- Publication Filter/Search -->
+                    <div class="publication-controls">
+                        <input type="text" id="pub-search" class="pub-search" placeholder="Search publications by title, author, or venue...">
+                        <div class="pub-filters">
+                            <button class="filter-btn" data-filter="all">All</button>
+                            <button class="filter-btn" data-filter="accepted">Accepted</button>
+                            <button class="filter-btn" data-filter="review">Under Review</button>
+                            <button class="filter-btn" data-filter="prep">In Preparation</button>
+                        </div>
+                    </div>
+                    
+                    <!-- ============================================ -->
+                    <article class="publication-item">
+                        <img src="assets/images/publication_cover/EMPATHIA_Cover.png" alt="EMPATHIA Paper" class="pub-image" loading="lazy" decoding="async">
+                        <div class="pub-content">
+                            <h3 class="pub-title">EMPATHIA: Multi-Faceted Human-AI Collaboration for Refugee Integration</h3>
+                            <div class="pub-authors">
+                                <span class="author-me">Mohamed Rayan Barhdadi</span>, 
+                                <span>Mehmet Tuncel</span>, 
+                                <span>Erchin Serpedin</span>, 
+                                <span>Hasan Kurban</span>
+                            </div>
+                            <div class="pub-venue">
+                                <span class="venue-name">The 39<sup>th</sup> Annual Conference on Neural Information Processing Systems (NeurIPS)<br>San Diego, USA 2025</span><br>
+                                <span class="pub-status review">Under Review</span>
+                            </div>
+                            <div class="pub-links">
+                                <a href="https://arxiv.org/abs/2508.07671" class="link-button" target="_blank"><i class="fas fa-file-pdf"></i> Paper</a>
+                                <a href="https://github.com/KurbanIntelligenceLab/empathia" class="link-button" target="_blank"><i class="fas fa-code"></i> Code</a>
+                                <a href="https://microdata.unhcr.org/index.php/catalog/302?utm_source" class="link-button" target="_blank"><i class="fas fa-database"></i> Dataset</a>
+                                <a href="https://kurbanintelligencelab.github.io/empathia/" class="link-button" target="_blank"><i class="fas fa-globe"></i> Project Website</a>
+                                <a href="#" class="link-button" onclick="showBibTeX('empathia')"><i class="fas fa-quote-right"></i> BibTeX</a>
+                            </div>
+                        </div>
+                    </article>
+                    
+                    <!-- ============================================ -->
+                    <article class="publication-item">
+                        <img src="assets/images/publication_cover/PhysicsNeRF_Cover.png" alt="PhysicsNeRF" class="pub-image" loading="lazy" decoding="async">
+                        <div class="pub-content">
+                            <h3 class="pub-title">PhysicsNeRF: Physics-Guided 3D Reconstruction from Sparse Views</h3>
+                            <div class="pub-authors">
+                                <span class="author-me">Mohamed Rayan Barhdadi</span>, 
+                                <span>Hasan Kurban</span>, 
+                                <span>Hussein Alnuweiri</span>
+                            </div>
+                            <div class="pub-venue">
+                                <span class="venue-name">The 42<sup>nd</sup> International Conference on Machine Learning (ICML)<br>Building Physically Plausible World Models<br>Vancouver, Canada 2025</span><br>
+                                <span class="pub-status accepted">Accepted</span>
+                            </div>
+                            <div class="pub-links">
+                                <a href="https://arxiv.org/abs/2505.23481" class="link-button" target="_blank"><i class="fas fa-file-pdf"></i> Paper</a>
+                                <a href="assets/documents/posters/PhysicsNeRF_ICML_poster.pdf#zoom=25" class="link-button" target="_blank"><i class="fas fa-file-image"></i> Poster</a>
+                                <a href="https://github.com/bmrayan/PhysicsNeRF" class="link-button" target="_blank"><i class="fas fa-code"></i> Code</a>
+                                <a href="https://drive.google.com/drive/folders/1cK3UDIJqKAAm7zyrxRYVFJ0BRMgrwhh4" class="link-button" target="_blank"><i class="fas fa-database"></i> Dataset</a>
+                                <a href="#" class="link-button" onclick="showBibTeX('physicsnerf')"><i class="fas fa-quote-right"></i> BibTeX</a>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- ============================================ -->
+                    <!-- PUBLICATION 3: Transformer Diagnostics (CIGRE 2025) -->
+                    <!-- Status: Accepted -->
+                    <!-- Update links when paper is published -->
+                    <!-- ============================================ -->
+                    <article class="publication-item">
+                        <img src="assets/images/publication_cover/DGADB_Cover.png" alt="Transformer Diagnostics" class="pub-image" loading="lazy" decoding="async">
+                        <div class="pub-content">
+                            <h3 class="pub-title">Advancing Transformer Diagnostics: A Statistical Analysis of a Publicly Available DGA Database</h3>
+                            <div class="pub-authors">
+                                <span class="author-me">Mohamed Rayan Barhdadi</span>, 
+                                <span>Farheen Jaldurgam</span>, 
+                                <span>Selma K.E. Awadallah</span>
+                            </div>
+                            <div class="pub-venue">
+                                <span class="venue-name">The 21<sup>st</sup> CIGRE International Conference (GCC-CIGRE)<br>Kuwait 2025</span><br>
+                                <span class="pub-status accepted">Accepted</span>
+                            </div>
+                            <div class="pub-links">
+                                <a href="assets/documents/papers/DGAFullPaper.pdf#zoom=90" class="link-button" target="_blank"><i class="fas fa-file-pdf"></i> Paper</a>
+                                <a href="https://github.com/bmrayan/dgadb" class="link-button" target="_blank"><i class="fas fa-code"></i> Code</a>
+                                <a href="https://bmrayan.com/dgadb/" class="link-button" target="_blank"><i class="fas fa-database"></i> Dataset</a>
+                                <a href="https://bmrayan.com/dgadb/" class="link-button" target="_blank"><i class="fas fa-globe"></i> Project Website</a>
+                                <a href="#" class="link-button" onclick="showBibTeX('cigre')"><i class="fas fa-quote-right"></i> BibTeX</a>
+                            </div>
+                        </div>
+                    </article>
+
+
+                </section>
+
+                <!-- ============================================ -->
+                <!-- RESEARCH EXPERIENCE SECTION -->
+                <!-- ============================================ -->
+                <section id="experience" class="section">
+                    <h2>Highlighted Experience <span class="cv-note">(see CV for complete details)</span></h2>
+                    
+                    <div class="experience-item">
+                        <img src="assets/images/logos/Kurban_IL.png" alt="Kurban Intelligence Lab Logo" class="exp-logo kurban-lab-logo" loading="eager" fetchpriority="high">
+                        <div class="exp-content">
+                            <div class="exp-header">
+                                <h3>Student Researcher</h3>
+                                <span class="exp-date">Mar 2025 - Present</span>
+                            </div>
+                            <div class="exp-details">
+                                <p class="exp-org">Kurban Intelligence Lab</p>
+                                <p class="exp-advisor">Advisor: Dr. Hasan Kurban</p>
+                                <p class="exp-desc">Leading research on my flagship projects PhysicsNeRF and EMPATHIA, while exploring diverse high-level ML research areas including multi-agent systems, neural rendering, and AI for social good applications and more.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="experience-item">
+                        <img src="assets/images/logos/QCRI.png" alt="QCRI Logo" class="exp-logo" loading="eager">
+                        <div class="exp-content">
+                            <div class="exp-header">
+                                <h3>Research Intern</h3>
+                                <span class="exp-date">May 2025 - Present</span>
+                            </div>
+                            <div class="exp-details">
+                                <p class="exp-org">Artificial Intelligence Group, Qatar Computing Research Institute (QCRI)</p>
+                                <p class="exp-advisor">Advisors: Dr. Halima Bensmail, Dr. Michael Aupetit</p>
+                                <p class="exp-desc">Developing non-volume preserving flow models for mode clustering in high-dimensional data. Using ADAM optimization to find modes and avoid spurious local optima in gradient ascent clustering approaches.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="experience-item">
+                        <img src="assets/images/logos/slb.png" alt="SLB Logo" class="exp-logo" loading="eager">
+                        <div class="exp-content">
+                            <div class="exp-header">
+                                <h3>Engineering/Data Science Intern</h3>
+                                <span class="exp-date">Jun 2025 - Aug 2025</span>
+                            </div>
+                            <div class="exp-details">
+                                <p class="exp-org">SLB Qatar Headquarters</p>
+                                <p class="exp-desc">Developed TechLog plugin automating cement and corrosion evaluation reports, reducing turnaround time from 2-3 days to minutes, enabling ~$100k potential revenue.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="experience-item">
+                        <img src="assets/images/logos/tamu.png" alt="Texas A&M Logo" class="exp-logo" loading="eager">
+                        <div class="exp-content">
+                            <div class="exp-header">
+                                <h3>Undergraduate Research Assistant</h3>
+                                <span class="exp-date">Feb 2024 - Dec 2024</span>
+                            </div>
+                            <div class="exp-details">
+                                <p class="exp-org">Power System Modeling Lab, Texas A&M University</p>
+                                <p class="exp-advisor">Advisor: Dr. Selma Awadallah</p>
+                                <p class="exp-desc">Created dataset with over 700 transformers and published this dataset along with its statistical analysis at CIGRE conference. Designed MySQL database for large-scale industrial monitoring data.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ============================================ -->
+                <!-- HOBBIES SECTION -->
+                <!-- ============================================ -->
+                <section id="hobbies" class="section">
+                    <h2>Hobbies outside of research ;)</h2>
+                    <p class="hobbies-intro">
+                        Beyond research, I enjoy traveling and mountaineering, having climbed several mountains including the highest peaks of North Africa, 
+                        with plans for many more adventures. I'm also passionate about running long distances, combining my love for physical challenges 
+                        with exploring new places. In conclusion, I love nature and exploring.
+                    </p>
+                    <div class="hobbies-gallery">
+                        <div class="hobby-item">
+                            <img src="assets/images/photos/traveling.jpg" alt="Travel Adventures" class="hobby-image" loading="lazy">
+                            <div class="hobby-caption">
+                                <div class="hobby-title">Unlocking New<br>Locations ✈️</div>
+                                <div class="hobby-subtitle">George Bush Intercontinental Airport, Houston, TX, USA</div>
+                            </div>
+                        </div>
+                        <div class="hobby-item">
+                            <img src="assets/images/photos/hiking.jpg" alt="Atlas Mountains" class="hobby-image" loading="lazy">
+                            <div class="hobby-caption">
+                                <div class="hobby-title">Hiking in the<br>Atlas Mountains 🏔️</div>
+                                <div class="hobby-subtitle">Mt. Toubkal (4,167m), Morocco, North Africa</div>
+                            </div>
+                        </div>
+                        <div class="hobby-item">
+                            <img src="assets/images/photos/hiking2.jpg" alt="Trekking in British Columbia" class="hobby-image" loading="lazy">
+                            <div class="hobby-caption">
+                                <div class="hobby-title">Trekking in<br>British Columbia 🥾</div>
+                                <div class="hobby-subtitle">St. Mark Summit - Lions Bay, British Columbia, Canada</div>
+                            </div>
+                        </div>
+                        <div class="hobby-item">
+                            <img src="assets/images/photos/running.jpg" alt="Ultra-Marathon Prep" class="hobby-image" loading="lazy">
+                            <div class="hobby-caption">
+                                <div class="hobby-title">Training for<br>Ultra-Marathons 🏃‍♂️</div>
+                                <div class="hobby-subtitle">Education City, Doha, Qatar</div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ============================================ -->
+                <!-- JOURNAL SECTION -->
+                <!-- ============================================ -->
+                <section id="journal" class="section">
+                    <h2>Journal</h2>
+                    <p class="journal-text">
+                        Read my thoughts and reflections on research, life, and everything in between! And bonus stories about my adventures across the world ;) 
+                        <a href="blog.html" target="_blank" class="journal-link">Read my blog here</a>.
+                    </p>
+                </section>
+
+                <!-- ============================================ -->
+                <!-- CONTACT SECTION -->
+                <!-- ============================================ -->
+                <section id="contact" class="section">
+                    <h2>Contact</h2>
+                    <div class="contact-content">
+                        <p class="contact-intro">
+                            I'm always excited to discuss research collaborations and explore new opportunities in interdisciplinary machine learning. 
+                            Whether you're working on theoretical foundations, real-world applications, or anywhere in between, 
+                            I'd love to connect and explore how we can push the boundaries of science together!
+                        </p>
+                        <div class="contact-info">
+                            <div class="email-container">
+                                <div class="email-item">
+                                    <i class="fas fa-envelope"></i>
+                                    <a href="mailto:rayan.barhdadi@tamu.edu">rayan.barhdadi@tamu.edu</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                </main>
+
+                <!-- ============================================ -->
+                <!-- FOOTER -->
+                <!-- ============================================ -->
+                <footer class="footer">
+                    <p>&copy; 2025 Mohamed Rayan Barhdadi. All rights reserved.</p>
+                </footer>
+            </div>
+        </div>
+    </div>
+
+    <!-- MOBILE CONTENT -->
+    <div id="mobile-content" style="display: none;">
+        <!-- Mobile Header -->
+        <header class="mobile-header">
+            <button class="menu-toggle" id="menuToggle" aria-label="Menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <div class="header-title">Mohamed Rayan Barhdadi</div>
+        </header>
+        
+        <!-- Mobile Navigation Drawer -->
+        <nav class="mobile-nav" id="mobileNav">
+            <a href="#home" onclick="closeNav()">Home</a>
+            <a href="#about" onclick="closeNav()">About</a>
+            <a href="#news" onclick="closeNav()">News</a>
+            <a href="#publications" onclick="closeNav()">Publications</a>
+            <a href="#experience" onclick="closeNav()">Experience</a>
+            <a href="#hobbies" onclick="closeNav()">Hobbies</a>
+            <a href="#journal" onclick="closeNav()">Journal</a>
+            <a href="#contact" onclick="closeNav()">Contact</a>
+        </nav>
+        
+        <!-- Navigation Overlay -->
+        <div class="nav-overlay" id="navOverlay" onclick="closeNav()"></div>
+        
+        <!-- Main Content -->
+        <main class="mobile-main-content">
+            <!-- Hero Section -->
+            <section id="home" class="hero-section">
+                <img src="assets/images/photos/Light HS25.jpg" alt="Mohamed Rayan Barhdadi" class="profile-image">
+                <h1 class="hero-name">MOHAMED RAYAN<br>BARHDADI</h1>
+                <p class="hero-title">Researcher, Learner, Artist</p>
+                <p class="hero-affiliation">
+                    Electrical Engineering<br>
+                    <a href="https://www.qatar.tamu.edu/" target="_blank">Texas A&M University</a>
+                </p>
                 
                 <!-- Social Links -->
-                <div class="sidebar-socials">
-                    <a href="mailto:rayan.barhdadi@tamu.edu" class="social-item" title="Email">
+                <div class="social-grid">
+                    <a href="mailto:rayan.barhdadi@tamu.edu" class="social-link" title="Email">
                         <i class="fas fa-envelope"></i>
                         <span>Email</span>
                     </a>
-                    <a href="https://scholar.google.com/citations?user=G7qjc6kAAAAJ&hl=en&oi=ao" class="social-item" target="_blank" title="Google Scholar">
+                    <a href="https://scholar.google.com/citations?user=G7qjc6kAAAAJ&hl=en&oi=ao" class="social-link" target="_blank" title="Google Scholar">
                         <i class="ai ai-google-scholar"></i>
                         <span>Scholar</span>
                     </a>
-                    <a href="https://github.com/BMRayan/" class="social-item" target="_blank" title="GitHub">
+                    <a href="https://github.com/BMRayan/" class="social-link" target="_blank" title="GitHub">
                         <i class="fab fa-github"></i>
                         <span>GitHub</span>
                     </a>
-                    <a href="https://www.linkedin.com/in/bmrayan/" class="social-item" target="_blank" title="LinkedIn">
+                    <a href="https://www.linkedin.com/in/bmrayan/" class="social-link" target="_blank" title="LinkedIn">
                         <i class="fab fa-linkedin"></i>
                         <span>LinkedIn</span>
                     </a>
-                    <a href="https://twitter.com/MRBarhdadi" class="social-item" target="_blank" title="Twitter">
+                    <a href="https://twitter.com/MRBarhdadi" class="social-link" target="_blank" title="Twitter">
                         <i class="fab fa-twitter"></i>
                         <span>Twitter</span>
                     </a>
-                    <a href="CVs/CV_ICML.pdf" class="social-item" target="_blank" title="Download CV">
+                    <a href="CVs/CV_ICML.pdf" class="social-link" target="_blank" title="Download CV">
                         <i class="fas fa-file-pdf"></i>
                         <span>CV (PDF)</span>
                     </a>
                 </div>
-                
-                <!-- Recent News in Sidebar -->
-                <div class="sidebar-news">
-                    <h3 class="sidebar-section-title">Recent News</h3>
-                    <div class="sidebar-news-list">
-                        <div class="sidebar-news-item">
-                            <span class="news-date">Jul 2025</span>
-                            <span class="news-text">Paper accepted at <strong>ICML 2025</strong> Workshop</span>
-                        </div>
-                        <div class="sidebar-news-item">
-                            <span class="news-date">Jun 2025</span>
-                            <span class="news-text">Started internship at <strong>SLB Qatar</strong></span>
-                        </div>
-                        <div class="sidebar-news-item">
-                            <span class="news-date">May 2025</span>
-                            <span class="news-text">Joined <strong>QCRI</strong> as Research Intern</span>
-                        </div>
-                        <div class="sidebar-news-item">
-                            <span class="news-date">Feb 2025</span>
-                            <span class="news-text">🏆 <strong>1st Place</strong> - Invent for the Planet</span>
-                        </div>
-                        <div class="sidebar-news-item">
-                            <span class="news-date">Feb 2025</span>
-                            <span class="news-text">🏆 <strong>Best Poster</strong> - HBKU-TAMU Research</span>
-                        </div>
-                        <div class="sidebar-news-item">
-                            <span class="news-date">Jan 2025</span>
-                            <span class="news-text">Selected for <strong>UG Research Scholars</strong></span>
-                        </div>
-                        <div class="sidebar-news-item">
-                            <span class="news-date">Oct 2024</span>
-                            <span class="news-text">🏆 Won <strong>QF Tech Pitch</strong> ($11,000)</span>
-                        </div>
-                        <div class="sidebar-news-item">
-                            <span class="news-date">Aug 2024</span>
-                            <span class="news-text">Awarded <strong>UREP Grant</strong> by Qatar Research</span>
-                        </div>
+            </section>
+            
+            <!-- Recent News -->
+            <section id="news" class="mobile-section">
+                <h2>RECENT NEWS</h2>
+                <div class="news-container">
+                    <div class="news-item">
+                        <span class="news-date">Jul 2025</span>
+                        <span class="news-text">Paper accepted at <strong>ICML 2025</strong> Workshop</span>
+                    </div>
+                    <div class="news-item">
+                        <span class="news-date">Jun 2025</span>
+                        <span class="news-text">Started internship at <strong>SLB Qatar</strong></span>
+                    </div>
+                    <div class="news-item">
+                        <span class="news-date">May 2025</span>
+                        <span class="news-text">Joined <strong>QCRI</strong> as Research Intern</span>
+                    </div>
+                    <div class="news-item">
+                        <span class="news-date">Feb 2025</span>
+                        <span class="news-text">🏆 <strong>1st Place</strong> - Invent for the Planet</span>
+                    </div>
+                    <div class="news-item">
+                        <span class="news-date">Feb 2025</span>
+                        <span class="news-text">🏆 <strong>Best Poster</strong> - HBKU-TAMU Research</span>
+                    </div>
+                    <div class="news-item">
+                        <span class="news-date">Jan 2025</span>
+                        <span class="news-text">Selected for <strong>UG Research Scholars</strong></span>
+                    </div>
+                    <div class="news-item">
+                        <span class="news-date">Oct 2024</span>
+                        <span class="news-text">🏆 Won <strong>QF Tech Pitch</strong> ($11,000)</span>
+                    </div>
+                    <div class="news-item">
+                        <span class="news-date">Aug 2024</span>
+                        <span class="news-text">Awarded <strong>UREP Grant</strong> by Qatar Research</span>
                     </div>
                 </div>
-            </div>
-        </aside>
-        
-        <!-- ============================================ -->
-        <!-- MAIN CONTENT AREA -->
-        <!-- ============================================ -->
-        <div class="main-container">
-            <!-- Top Header Bar -->
-            <header class="top-header">
-                <div class="header-content">
-                    <!-- Navigation -->
-                    <nav class="top-nav">
-                        <a href="#about" class="nav-link current-section">About</a>
-                        <a href="#publications" class="nav-link">Publications</a>
-                        <a href="#experience" class="nav-link">Experience</a>
-                        <a href="#hobbies" class="nav-link">Hobbies</a>
-                        <a href="#journal" class="nav-link">Journal</a>
-                        <a href="#contact" class="nav-link">Contact</a>
-                    </nav>
-                </div>
-            </header>
+            </section>
             
-            <main class="main-content">
-            <!-- ============================================ -->
-            <!-- ABOUT SECTION -->
-            <!-- ============================================ -->
-            <section id="about" class="section">
-                <h2>About Me</h2>
+            <!-- About Section -->
+            <section id="about" class="mobile-section">
+                <h2>ABOUT ME</h2>
                 <div class="about-content">
                     <div class="about-text">
                         <p>
-                    I'm Mohamed Rayan Barhdadi, a third-year Electrical Engineering student and researcher at <a href="https://www.qatar.tamu.edu/" target="_blank">Texas A&M University</a>, where I also pursue a minor in Mathematics. My research focuses on machine learning and computer vision, particularly 3D computer vision and AI for social good, though I remain open to exploring interdisciplinary domains where ML can create meaningful impact. I have published my research at top-tier venues including ICML 2025 and have work currently under review at NeurIPS 2025, and I'm fortunate to work as a Student Researcher at the <a href="https://kurbanintelligencelab.com/" target="_blank">Kurban Intelligence Lab</a>.
-                </p>
-                <p>
-                    <strong>PhysicsNeRF:</strong> I developed <a href="https://arxiv.org/abs/2505.23481" target="_blank">PhysicsNeRF</a>, a physics-guided framework that integrates physical constraints into neural radiance fields for 3D reconstruction from sparse views—achieving 21.4 dB PSNR using only 8 input images. This work, accepted at ICML 2025 Building Physically Plausible World Models, addresses fundamental challenges in sparse view 3D reconstruction with applications in robotics, autonomous systems, medicine, and virtual reality.
-                </p>
-                <p>
-                    <strong>EMPATHIA:</strong> I created <a href="https://kurbanintelligencelab.github.io/empathia/" target="_blank">EMPATHIA</a>, a multi-agent AI framework for refugee integration that employs emotional, cultural, and ethical reasoning agents to make transparent, explainable, value-aligned reasoning for integration decisions. This human-AI collaborative system, under review at NeurIPS 2025 Creative AI track, demonstrates how AI can preserve human dignity when machines participate in life-altering decisions.
-                </p>
-                <p>
-                    I have the chance to work under the supervision and collaborate with: <a href="https://www.hasankurban.com/" target="_blank">Dr. Hasan Kurban</a> and <a href="https://engineering.tamu.edu/electrical/profiles/eserpedin.html" target="_blank">Dr. Erchin Serpedin</a> on AI for social good, <a href="https://www.hasankurban.com/" target="_blank">Dr. Hasan Kurban</a> and <a href="https://ieeexplore.ieee.org/author/37269837800" target="_blank">Dr. Hussein Alnuweiri</a> on 3D neural rendering, and <a href="https://www.hbku.edu.qa/en/staff/dr-halima-bensmail" target="_blank">Dr. Halima Bensmail</a> & <a href="https://www.hbku.edu.qa/en/staff/dr-micha%C3%ABl-aupetit" target="_blank">Dr. Michael Aupetit</a> at QCRI on clustering algorithms.
-                </p>
+                            I'm Mohamed Rayan Barhdadi, a third-year Electrical Engineering student and researcher at <a href="https://www.qatar.tamu.edu/" target="_blank">Texas A&M University</a>, where I also pursue a minor in Mathematics. My research focuses on machine learning and computer vision, particularly 3D computer vision and AI for social good, though I remain open to exploring interdisciplinary domains where ML can create meaningful impact. I have published my research at top-tier venues including ICML 2025 and have work currently under review at NeurIPS 2025, and I'm fortunate to work as a Student Researcher at the <a href="https://kurbanintelligencelab.com/" target="_blank">Kurban Intelligence Lab</a>.
+                        </p>
+                        <p>
+                            <strong>PhysicsNeRF:</strong> I developed <a href="https://arxiv.org/abs/2505.23481" target="_blank">PhysicsNeRF</a>, a physics-guided framework that integrates physical constraints into neural radiance fields for 3D reconstruction from sparse views—achieving 21.4 dB PSNR using only 8 input images. This work, accepted at ICML 2025 Building Physically Plausible World Models, addresses fundamental challenges in sparse view 3D reconstruction with applications in robotics, autonomous systems, medicine, and virtual reality.
+                        </p>
+                        <p>
+                            <strong>EMPATHIA:</strong> I created <a href="https://kurbanintelligencelab.github.io/empathia/" target="_blank">EMPATHIA</a>, a multi-agent AI framework for refugee integration that employs emotional, cultural, and ethical reasoning agents to make transparent, explainable, value-aligned reasoning for integration decisions. This human-AI collaborative system, under review at NeurIPS 2025 Creative AI track, demonstrates how AI can preserve human dignity when machines participate in life-altering decisions.
+                        </p>
+                        <p>
+                            I have the chance to work under the supervision and collaborate with: <a href="https://www.hasankurban.com/" target="_blank">Dr. Hasan Kurban</a> and <a href="https://engineering.tamu.edu/electrical/profiles/eserpedin.html" target="_blank">Dr. Erchin Serpedin</a> on AI for social good, <a href="https://www.hasankurban.com/" target="_blank">Dr. Hasan Kurban</a> and <a href="https://ieeexplore.ieee.org/author/37269837800" target="_blank">Dr. Hussein Alnuweiri</a> on 3D neural rendering, and <a href="https://www.hbku.edu.qa/en/staff/dr-halima-bensmail" target="_blank">Dr. Halima Bensmail</a> & <a href="https://www.hbku.edu.qa/en/staff/dr-micha%C3%ABl-aupetit" target="_blank">Dr. Michael Aupetit</a> at QCRI on clustering algorithms.
+                        </p>
                     </div>
                     <div class="about-images">
-                        <img src="assets/images/photos/MAINPIC.jpeg" alt="Mohamed Rayan Barhdadi" class="about-photo" loading="eager">
-                        <img src="assets/images/photos/poster.jpg" alt="Research Poster" class="about-photo" loading="eager">
+                        <img src="assets/images/photos/MAINPIC.jpeg" alt="Mohamed Rayan Barhdadi" class="about-photo">
+                        <img src="assets/images/photos/poster.jpg" alt="Research Poster" class="about-photo">
                     </div>
                 </div>
                 <div class="research-philosophy">
                     <hr class="philosophy-divider">
-                    <p class="philosophy-text"><em>Research and Life Philosophy: I'm passionate about creating work that makes a real difference<br>through genuine insight rather than optimizing numbers. I follow research questions wherever they lead,<br>as long as they advance scientific understanding and benefit society.</em></p>
+                    <p class="philosophy-text"><em>Research and Life Philosophy: I'm passionate about creating work that makes a real difference through genuine insight rather than optimizing numbers. I follow research questions wherever they lead, as long as they advance scientific understanding and benefit society.</em></p>
                 </div>
             </section>
-
-
-            <!-- ============================================ -->
-            <!-- PUBLICATIONS SECTION -->
-            <!-- Each publication has:
-            <!-- - Image/GIF on the left (pubphoto.gif placeholder)
-            <!-- - Title, authors, venue, status
-            <!-- - Links: Paper, Poster, Code, Dataset, Video, Project Website, BibTeX
-            <!-- Update the href="#" with actual links when available
-            <!-- ============================================ -->
-            <section id="publications" class="section">
-                <h2>Publications</h2>
+            
+            <!-- Publications Section -->
+            <section id="publications" class="mobile-section">
+                <h2>PUBLICATIONS</h2>
                 
-                <!-- Publication Filter/Search -->
-                <div class="publication-controls">
-                    <input type="text" id="pub-search" class="pub-search" placeholder="Search publications by title, author, or venue...">
-                    <div class="pub-filters">
-                        <button class="filter-btn" data-filter="all">All</button>
-                        <button class="filter-btn" data-filter="accepted">Accepted</button>
-                        <button class="filter-btn" data-filter="review">Under Review</button>
-                        <button class="filter-btn" data-filter="prep">In Preparation</button>
+                <!-- EMPATHIA -->
+                <div class="publication-card">
+                    <img src="assets/images/publication_cover/EMPATHIA_Cover.png" alt="EMPATHIA" class="pub-image-mobile">
+                    <h3 class="pub-title">EMPATHIA: Multi-Faceted Human-AI Collaboration for Refugee Integration</h3>
+                    <div class="pub-authors">
+                        <span class="author-me">Mohamed Rayan Barhdadi</span>, 
+                        <span>Mehmet Tuncel</span>, 
+                        <span>Erchin Serpedin</span>, 
+                        <span>Hasan Kurban</span>
+                    </div>
+                    <div class="pub-venue">
+                        <span class="venue-name">The 39<sup>th</sup> Annual Conference on Neural Information Processing Systems (NeurIPS)<br>San Diego, USA 2025</span><br>
+                        <span class="pub-status review">Under Review</span>
+                    </div>
+                    <div class="pub-links">
+                        <a href="https://arxiv.org/abs/2508.07671" target="_blank" class="pub-link-btn"><i class="fas fa-file-pdf"></i> Paper</a>
+                        <a href="https://github.com/KurbanIntelligenceLab/empathia" target="_blank" class="pub-link-btn"><i class="fas fa-code"></i> Code</a>
+                        <a href="https://microdata.unhcr.org/index.php/catalog/302?utm_source" target="_blank" class="pub-link-btn"><i class="fas fa-database"></i> Dataset</a>
+                        <a href="https://kurbanintelligencelab.github.io/empathia/" target="_blank" class="pub-link-btn"><i class="fas fa-globe"></i> Project Website</a>
+                        <a href="#" onclick="showBibTeX('empathia'); return false;" class="pub-link-btn"><i class="fas fa-quote-right"></i> BibTeX</a>
                     </div>
                 </div>
                 
-                <!-- ============================================ -->
-                <article class="publication-item">
-                    <img src="assets/images/publication_cover/EMPATHIA_Cover.png" alt="EMPATHIA Paper" class="pub-image" loading="lazy" decoding="async">
-                    <div class="pub-content">
-                        <h3 class="pub-title">EMPATHIA: Multi-Faceted Human-AI Collaboration for Refugee Integration</h3>
-                        <div class="pub-authors">
-                            <span class="author-me">Mohamed Rayan Barhdadi</span>, 
-                            <span>Mehmet Tuncel</span>, 
-                            <span>Erchin Serpedin</span>, 
-                            <span>Hasan Kurban</span>
-                        </div>
-                        <div class="pub-venue">
-                            <span class="venue-name">The 39<sup>th</sup> Annual Conference on Neural Information Processing Systems (NeurIPS)<br>San Diego, USA 2025</span><br>
-                            <span class="pub-status review">Under Review</span>
-                        </div>
-                        <div class="pub-links">
-                            <a href="https://arxiv.org/abs/2508.07671" class="link-button" target="_blank"><i class="fas fa-file-pdf"></i> Paper</a>
-                            <a href="https://github.com/KurbanIntelligenceLab/empathia" class="link-button" target="_blank"><i class="fas fa-code"></i> Code</a>
-                            <a href="https://microdata.unhcr.org/index.php/catalog/302?utm_source" class="link-button" target="_blank"><i class="fas fa-database"></i> Dataset</a>
-                            <a href="https://kurbanintelligencelab.github.io/empathia/" class="link-button" target="_blank"><i class="fas fa-globe"></i> Project Website</a>
-                            <a href="#" class="link-button" onclick="showBibTeX('empathia')"><i class="fas fa-quote-right"></i> BibTeX</a>
-                        </div>
+                <!-- PhysicsNeRF -->
+                <div class="publication-card">
+                    <img src="assets/images/publication_cover/PhysicsNeRF_Cover.png" alt="PhysicsNeRF" class="pub-image-mobile">
+                    <h3 class="pub-title">PhysicsNeRF: Physics-Guided 3D Reconstruction from Sparse Views</h3>
+                    <div class="pub-authors">
+                        <span class="author-me">Mohamed Rayan Barhdadi</span>, 
+                        <span>Hasan Kurban</span>, 
+                        <span>Hussein Alnuweiri</span>
                     </div>
-                </article>
+                    <div class="pub-venue">
+                        <span class="venue-name">The 42<sup>nd</sup> International Conference on Machine Learning (ICML)<br>Building Physically Plausible World Models<br>Vancouver, Canada 2025</span><br>
+                        <span class="pub-status accepted">Accepted</span>
+                    </div>
+                    <div class="pub-links">
+                        <a href="https://arxiv.org/abs/2505.23481" target="_blank" class="pub-link-btn"><i class="fas fa-file-pdf"></i> Paper</a>
+                        <a href="assets/documents/posters/PhysicsNeRF_ICML_poster.pdf#zoom=25" target="_blank" class="pub-link-btn"><i class="fas fa-file-image"></i> Poster</a>
+                        <a href="https://github.com/bmrayan/PhysicsNeRF" target="_blank" class="pub-link-btn"><i class="fas fa-code"></i> Code</a>
+                        <a href="https://drive.google.com/drive/folders/1cK3UDIJqKAAm7zyrxRYVFJ0BRMgrwhh4" target="_blank" class="pub-link-btn"><i class="fas fa-database"></i> Dataset</a>
+                        <a href="#" onclick="showBibTeX('physicsnerf'); return false;" class="pub-link-btn"><i class="fas fa-quote-right"></i> BibTeX</a>
+                    </div>
+                </div>
                 
-                <!-- ============================================ -->
-                <article class="publication-item">
-                    <img src="assets/images/publication_cover/PhysicsNeRF_Cover.png" alt="PhysicsNeRF" class="pub-image" loading="lazy" decoding="async">
-                    <div class="pub-content">
-                        <h3 class="pub-title">PhysicsNeRF: Physics-Guided 3D Reconstruction from Sparse Views</h3>
-                        <div class="pub-authors">
-                            <span class="author-me">Mohamed Rayan Barhdadi</span>, 
-                            <span>Hasan Kurban</span>, 
-                            <span>Hussein Alnuweiri</span>
-                        </div>
-                        <div class="pub-venue">
-                            <span class="venue-name">The 42<sup>nd</sup> International Conference on Machine Learning (ICML)<br>Building Physically Plausible World Models<br>Vancouver, Canada 2025</span><br>
-                            <span class="pub-status accepted">Accepted</span>
-                        </div>
-                        <div class="pub-links">
-                            <a href="https://arxiv.org/abs/2505.23481" class="link-button" target="_blank"><i class="fas fa-file-pdf"></i> Paper</a>
-                            <a href="assets/documents/posters/PhysicsNeRF_ICML_poster.pdf#zoom=25" class="link-button" target="_blank"><i class="fas fa-file-image"></i> Poster</a>
-                            <a href="https://github.com/bmrayan/PhysicsNeRF" class="link-button" target="_blank"><i class="fas fa-code"></i> Code</a>
-                            <a href="https://drive.google.com/drive/folders/1cK3UDIJqKAAm7zyrxRYVFJ0BRMgrwhh4" class="link-button" target="_blank"><i class="fas fa-database"></i> Dataset</a>
-                            <a href="#" class="link-button" onclick="showBibTeX('physicsnerf')"><i class="fas fa-quote-right"></i> BibTeX</a>
-                        </div>
+                <!-- Transformer Diagnostics -->
+                <div class="publication-card">
+                    <img src="assets/images/publication_cover/DGADB_Cover.png" alt="Transformer Diagnostics" class="pub-image-mobile">
+                    <h3 class="pub-title">Advancing Transformer Diagnostics: A Statistical Analysis of a Publicly Available DGA Database</h3>
+                    <div class="pub-authors">
+                        <span class="author-me">Mohamed Rayan Barhdadi</span>, 
+                        <span>Farheen Jaldurgam</span>, 
+                        <span>Selma K.E. Awadallah</span>
                     </div>
-                </article>
-
-                <!-- ============================================ -->
-                <!-- PUBLICATION 3: Transformer Diagnostics (CIGRE 2025) -->
-                <!-- Status: Accepted -->
-                <!-- Update links when paper is published -->
-                <!-- ============================================ -->
-                <article class="publication-item">
-                    <img src="assets/images/publication_cover/DGADB_Cover.png" alt="Transformer Diagnostics" class="pub-image" loading="lazy" decoding="async">
-                    <div class="pub-content">
-                        <h3 class="pub-title">Advancing Transformer Diagnostics: A Statistical Analysis of a Publicly Available DGA Database</h3>
-                        <div class="pub-authors">
-                            <span class="author-me">Mohamed Rayan Barhdadi</span>, 
-                            <span>Farheen Jaldurgam</span>, 
-                            <span>Selma K.E. Awadallah</span>
-                        </div>
-                        <div class="pub-venue">
-                            <span class="venue-name">The 21<sup>st</sup> CIGRE International Conference (GCC-CIGRE)<br>Kuwait 2025</span><br>
-                            <span class="pub-status accepted">Accepted</span>
-                        </div>
-                        <div class="pub-links">
-                            <a href="assets/documents/papers/DGAFullPaper.pdf#zoom=90" class="link-button" target="_blank"><i class="fas fa-file-pdf"></i> Paper</a>
-                            <a href="https://github.com/bmrayan/dgadb" class="link-button" target="_blank"><i class="fas fa-code"></i> Code</a>
-                            <a href="https://bmrayan.com/dgadb/" class="link-button" target="_blank"><i class="fas fa-database"></i> Dataset</a>
-                            <a href="https://bmrayan.com/dgadb/" class="link-button" target="_blank"><i class="fas fa-globe"></i> Project Website</a>
-                            <a href="#" class="link-button" onclick="showBibTeX('cigre')"><i class="fas fa-quote-right"></i> BibTeX</a>
-                        </div>
+                    <div class="pub-venue">
+                        <span class="venue-name">The 21<sup>st</sup> CIGRE International Conference (GCC-CIGRE)<br>Kuwait 2025</span><br>
+                        <span class="pub-status accepted">Accepted</span>
                     </div>
-                </article>
-
-
+                    <div class="pub-links">
+                        <a href="assets/documents/papers/DGAFullPaper.pdf#zoom=90" target="_blank" class="pub-link-btn"><i class="fas fa-file-pdf"></i> Paper</a>
+                        <a href="https://github.com/bmrayan/dgadb" target="_blank" class="pub-link-btn"><i class="fas fa-code"></i> Code</a>
+                        <a href="https://bmrayan.com/dgadb/" target="_blank" class="pub-link-btn"><i class="fas fa-database"></i> Dataset</a>
+                        <a href="https://bmrayan.com/dgadb/" target="_blank" class="pub-link-btn"><i class="fas fa-globe"></i> Project Website</a>
+                        <a href="#" onclick="showBibTeX('cigre'); return false;" class="pub-link-btn"><i class="fas fa-quote-right"></i> BibTeX</a>
+                    </div>
+                </div>
             </section>
-
-            <!-- ============================================ -->
-            <!-- RESEARCH EXPERIENCE SECTION -->
-            <!-- ============================================ -->
-            <section id="experience" class="section">
-                <h2>Highlighted Experience <span class="cv-note">(see CV for complete details)</span></h2>
+            
+            <!-- Experience Section -->
+            <section id="experience" class="mobile-section">
+                <h2>HIGHLIGHTED EXPERIENCE <span class="cv-note">(see CV for complete details)</span></h2>
                 
                 <div class="experience-item">
-                    <img src="assets/images/logos/Kurban_IL.png" alt="Kurban Intelligence Lab Logo" class="exp-logo kurban-lab-logo" loading="eager" fetchpriority="high">
+                    <img src="assets/images/logos/Kurban_IL.png" alt="Kurban Intelligence Lab Logo" class="exp-logo kurban-lab-logo" loading="lazy">
                     <div class="exp-content">
                         <div class="exp-header">
-                            <h3>Student Researcher</h3>
-                            <span class="exp-date">Mar 2025 - Present</span>
+                            <h3>Student<br>Researcher</h3>
+                            <span class="exp-date">Mar 2025 –<br>Present</span>
                         </div>
                         <div class="exp-details">
                             <p class="exp-org">Kurban Intelligence Lab</p>
@@ -735,11 +1977,11 @@
                 </div>
 
                 <div class="experience-item">
-                    <img src="assets/images/logos/QCRI.png" alt="QCRI Logo" class="exp-logo" loading="eager">
+                    <img src="assets/images/logos/QCRI.png" alt="QCRI Logo" class="exp-logo qcri-logo" loading="lazy">
                     <div class="exp-content">
                         <div class="exp-header">
-                            <h3>Research Intern</h3>
-                            <span class="exp-date">May 2025 - Present</span>
+                            <h3>Research<br>Intern</h3>
+                            <span class="exp-date">May 2025 –<br>Present</span>
                         </div>
                         <div class="exp-details">
                             <p class="exp-org">Artificial Intelligence Group, Qatar Computing Research Institute (QCRI)</p>
@@ -750,11 +1992,11 @@
                 </div>
 
                 <div class="experience-item">
-                    <img src="assets/images/logos/slb.png" alt="SLB Logo" class="exp-logo" loading="eager">
+                    <img src="assets/images/logos/slb.png" alt="SLB Logo" class="exp-logo slb-logo" loading="lazy">
                     <div class="exp-content">
                         <div class="exp-header">
                             <h3>Engineering/Data Science Intern</h3>
-                            <span class="exp-date">Jun 2025 - Aug 2025</span>
+                            <span class="exp-date">Jun 2025 –<br>Aug 2025</span>
                         </div>
                         <div class="exp-details">
                             <p class="exp-org">SLB Qatar Headquarters</p>
@@ -764,11 +2006,11 @@
                 </div>
 
                 <div class="experience-item">
-                    <img src="assets/images/logos/tamu.png" alt="Texas A&M Logo" class="exp-logo" loading="eager">
+                    <img src="assets/images/logos/tamu.png" alt="Texas A&M Logo" class="exp-logo tamu-logo" loading="lazy">
                     <div class="exp-content">
                         <div class="exp-header">
-                            <h3>Undergraduate Research Assistant</h3>
-                            <span class="exp-date">Feb 2024 - Dec 2024</span>
+                            <h3>Undergraduate<br>Research Asst.</h3>
+                            <span class="exp-date">Feb 2024 –<br>Dec 2024</span>
                         </div>
                         <div class="exp-details">
                             <p class="exp-org">Power System Modeling Lab, Texas A&M University</p>
@@ -778,65 +2020,59 @@
                     </div>
                 </div>
             </section>
-
-            <!-- ============================================ -->
-            <!-- HOBBIES SECTION -->
-            <!-- ============================================ -->
-            <section id="hobbies" class="section">
-                <h2>Hobbies outside of research ;)</h2>
-                <p class="hobbies-intro">
-                    Beyond research, I enjoy traveling and mountaineering, having climbed several mountains including the highest peaks of North Africa, 
-                    with plans for many more adventures. I'm also passionate about running long distances, combining my love for physical challenges 
-                    with exploring new places. In conclusion, I love nature and exploring.
-                </p>
-                <div class="hobbies-gallery">
-                    <div class="hobby-item">
-                        <img src="assets/images/photos/traveling.jpg" alt="Travel Adventures" class="hobby-image" loading="lazy">
-                        <div class="hobby-caption">
-                            <div class="hobby-title">Unlocking New<br>Locations ✈️</div>
-                            <div class="hobby-subtitle">George Bush Intercontinental Airport, Houston, TX, USA</div>
+            
+            <!-- Hobbies Section -->
+            <section id="hobbies" class="mobile-section">
+                <h2>HOBBIES OUTSIDE OF RESEARCH ;)</h2>
+                <p>Beyond research, I enjoy traveling and mountaineering, having climbed several mountains including the highest peaks of North Africa. I'm also passionate about running long distances.</p>
+                
+                <div class="hobbies-grid">
+                    <div class="hobby-card">
+                        <img src="assets/images/photos/traveling.jpg" alt="Travel" class="hobby-image">
+                        <div class="hobby-overlay">
+                            <div class="hobby-title">Unlocking New Locations ✈️</div>
+                            <div class="hobby-subtitle">Houston, TX, USA</div>
                         </div>
                     </div>
-                    <div class="hobby-item">
-                        <img src="assets/images/photos/hiking.jpg" alt="Atlas Mountains" class="hobby-image" loading="lazy">
-                        <div class="hobby-caption">
-                            <div class="hobby-title">Hiking in the<br>Atlas Mountains 🏔️</div>
-                            <div class="hobby-subtitle">Mt. Toubkal (4,167m), Morocco, North Africa</div>
+                    
+                    <div class="hobby-card">
+                        <img src="assets/images/photos/hiking.jpg" alt="Atlas Mountains" class="hobby-image">
+                        <div class="hobby-overlay">
+                            <div class="hobby-title">Atlas Mountains 🏔️</div>
+                            <div class="hobby-subtitle">Mt. Toubkal (4,167m), Morocco</div>
                         </div>
                     </div>
-                    <div class="hobby-item">
-                        <img src="assets/images/photos/hiking2.jpg" alt="Trekking in British Columbia" class="hobby-image" loading="lazy">
-                        <div class="hobby-caption">
-                            <div class="hobby-title">Trekking in<br>British Columbia 🥾</div>
-                            <div class="hobby-subtitle">St. Mark Summit - Lions Bay, British Columbia, Canada</div>
+                    
+                    <div class="hobby-card">
+                        <img src="assets/images/photos/hiking2.jpg" alt="British Columbia" class="hobby-image">
+                        <div class="hobby-overlay">
+                            <div class="hobby-title">Trekking in BC 🥾</div>
+                            <div class="hobby-subtitle">Lions Bay, British Columbia</div>
                         </div>
                     </div>
-                    <div class="hobby-item">
-                        <img src="assets/images/photos/running.jpg" alt="Ultra-Marathon Prep" class="hobby-image" loading="lazy">
-                        <div class="hobby-caption">
-                            <div class="hobby-title">Training for<br>Ultra-Marathons 🏃‍♂️</div>
-                            <div class="hobby-subtitle">Education City, Doha, Qatar</div>
+                    
+                    <div class="hobby-card">
+                        <img src="assets/images/photos/running.jpg" alt="Running" class="hobby-image">
+                        <div class="hobby-overlay">
+                            <div class="hobby-title">Ultra-Marathon Training 🏃‍♂️</div>
+                            <div class="hobby-subtitle">Doha, Qatar</div>
                         </div>
                     </div>
                 </div>
             </section>
-
-            <!-- ============================================ -->
-            <!-- JOURNAL SECTION -->
-            <!-- ============================================ -->
-            <section id="journal" class="section">
-                <h2>Journal</h2>
+            
+            <!-- Journal Section -->
+            <section id="journal" class="mobile-section">
+                <h2>JOURNAL</h2>
                 <p class="journal-text">
                     Read my thoughts and reflections on research, life, and everything in between! And bonus stories about my adventures across the world ;) 
                     <a href="blog.html" target="_blank" class="journal-link">Read my blog here</a>.
                 </p>
             </section>
-
-            <!-- ============================================ -->
-            <!-- CONTACT SECTION -->
-            <!-- ============================================ -->
-            <section id="contact" class="section">
-                <h2>Contact</h2>
+            
+            <!-- Contact Section -->
+            <section id="contact" class="mobile-section">
+                <h2>CONTACT</h2>
                 <div class="contact-content">
                     <p class="contact-intro">
                         I'm always excited to discuss research collaborations and explore new opportunities in interdisciplinary machine learning. 
@@ -853,18 +2089,15 @@
                     </div>
                 </div>
             </section>
-            </main>
-
-            <!-- ============================================ -->
-            <!-- FOOTER -->
-            <!-- ============================================ -->
-            <footer class="footer">
-                <p>&copy; 2025 Mohamed Rayan Barhdadi. All rights reserved.</p>
-            </footer>
-        </div>
+        </main>
+        
+        <!-- Footer -->
+        <footer class="mobile-footer">
+            <p>&copy; 2025 Mohamed Rayan Barhdadi. All rights reserved.</p>
+        </footer>
     </div>
 
-    <!-- BibTeX Modal -->
+    <!-- BibTeX Modal (Shared between both versions) -->
     <div id="bibtex-modal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -872,10 +2105,10 @@
                 <span class="close" onclick="closeBibTeX()">&times;</span>
             </div>
             <div class="modal-body">
-                <p id="modal-subtitle">Here is the BibTeX for PhysicsNeRF:</p>
+                <p id="modal-subtitle">Here is the BibTeX citation:</p>
                 <div class="bibtex-container">
                     <div class="bibtex-header">
-                        <span>PhysicsNeRF.bib</span>
+                        <span>Citation.bib</span>
                     </div>
                     <pre id="bibtex-content"></pre>
                     <button class="copy-btn" onclick="copyBibTeX()">
@@ -887,96 +2120,145 @@
     </div>
 
     <script src="assets/js/script.js" defer></script>
+    
+    <!-- Mobile Navigation Script -->
     <script>
-        // Preloader and Performance Optimization
-        document.addEventListener('DOMContentLoaded', function() {
-            
-            // Progressive image loading strategy for better performance
-            const criticalImages = [
-                'assets/images/photos/Light HS25.jpg',
-                'assets/images/photos/MAINPIC.jpeg'
-            ];
-            
-            // Load critical images immediately
-            criticalImages.forEach(src => {
-                const img = new Image();
-                img.src = src;
+        // Mobile Navigation
+        const menuToggle = document.getElementById('menuToggle');
+        const mobileNav = document.getElementById('mobileNav');
+        const navOverlay = document.getElementById('navOverlay');
+        
+        if (menuToggle) {
+            menuToggle.addEventListener('click', function() {
+                menuToggle.classList.toggle('active');
+                mobileNav.classList.toggle('active');
+                navOverlay.classList.toggle('active');
             });
+        }
+        
+        function closeNav() {
+            if (menuToggle) menuToggle.classList.remove('active');
+            if (mobileNav) mobileNav.classList.remove('active');
+            if (navOverlay) navOverlay.classList.remove('active');
+        }
+        
+        // BibTeX Modal Functions (shared)
+        function showBibTeX(paper) {
+            const modal = document.getElementById('bibtex-modal');
+            const content = document.getElementById('bibtex-content');
             
-            // Delay loading of non-critical images
-            window.addEventListener('load', () => {
-                // Load logos after initial page load
+            const bibtexData = {
+                physicsnerf: `@inproceedings{barhdadi2025physicsnerf,
+  title={PhysicsNeRF: Physics-Guided 3D Reconstruction from Sparse Views},
+  author={Barhdadi, Mohamed Rayan and Kurban, Hasan and Alnuweiri, Hussein},
+  booktitle={ICML 2025 Workshop on Building Physically Plausible World Models},
+  year={2025}
+}`,
+                empathia: `@article{barhdadi2025empathia,
+  title={EMPATHIA: Multi-Faceted Human-AI Collaboration for Refugee Integration},
+  author={Barhdadi, Mohamed Rayan and Tuncel, Mehmet and Serpedin, Erchin and Kurban, Hasan},
+  journal={arXiv preprint arXiv:2508.07671},
+  year={2025},
+  url={https://arxiv.org/abs/2508.07671}
+}`,
+                cigre: `@inproceedings{barhdadi2025transformer,
+  title={Advancing Transformer Diagnostics: A Statistical Analysis of a Publicly Available DGA Database},
+  author={Barhdadi, Mohamed Rayan and Jaldurgam, Farheen and Awadallah, Selma K.E.},
+  booktitle={21st CIGRE International Conference (GCC-CIGRE)},
+  year={2025}
+}`
+            };
+            
+            content.textContent = bibtexData[paper] || bibtexData.physicsnerf;
+            modal.classList.add('active');
+            modal.style.display = 'flex';
+        }
+        
+        function closeBibTeX() {
+            const modal = document.getElementById('bibtex-modal');
+            modal.classList.remove('active');
+            modal.style.display = 'none';
+        }
+        
+        function copyBibTeX() {
+            const content = document.getElementById('bibtex-content').textContent;
+            navigator.clipboard.writeText(content).then(() => {
+                const btn = document.querySelector('.copy-btn');
+                const originalText = btn.innerHTML;
+                btn.innerHTML = '<i class="fas fa-check"></i> Copied!';
                 setTimeout(() => {
-                    const logos = [
-                        'assets/images/logos/Kurban_IL.png',
-                        'assets/images/logos/QCRI.png',
-                        'assets/images/logos/slb.png',
-                        'assets/images/logos/tamu.png'
-                    ];
-                    logos.forEach(src => {
-                        const img = new Image();
-                        img.src = src;
-                    });
-                }, 1000);
-                
-                // Load publication covers and other images much later
-                setTimeout(() => {
-                    const deferredImages = [
-                        'assets/images/photos/poster.jpg',
-                        'assets/images/publication_cover/EMPATHIA_Cover.png',
-                        'assets/images/publication_cover/PhysicsNeRF_Cover.png',
-                        'assets/images/publication_cover/DGADB_Cover.png',
-                        'assets/images/photos/traveling.jpg',
-                        'assets/images/photos/hiking.jpg',
-                        'assets/images/photos/hiking2.jpg',
-                        'assets/images/photos/running.jpg'
-                    ];
-                    deferredImages.forEach(src => {
-                        const img = new Image();
-                        img.src = src;
-                    });
-                }, 3000);
+                    btn.innerHTML = originalText;
+                }, 2000);
             });
-            
-            // Add loading="lazy" to non-critical images
-            const lazyImages = document.querySelectorAll('img:not(.profile-photo):not(.exp-logo)');
-            lazyImages.forEach(img => {
-                if (!img.hasAttribute('loading')) {
-                    img.setAttribute('loading', 'lazy');
+        }
+        
+        // Smooth scroll for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
                 }
             });
-            
-            // Optimize animations for performance
-            const animatedElements = document.querySelectorAll('.publication-item, .experience-item, .hobby-card');
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.style.willChange = 'transform';
-                        setTimeout(() => {
-                            entry.target.style.willChange = 'auto';
-                        }, 1000);
-                    }
-                });
-            }, { threshold: 0.1 });
-            
-            animatedElements.forEach(el => observer.observe(el));
         });
-    </script>
-    <script>
+        
+        // Prevent double-tap zoom (mobile)
+        let lastTouchEnd = 0;
+        document.addEventListener('touchend', function (event) {
+            const now = (new Date()).getTime();
+            if (now - lastTouchEnd <= 300) {
+                event.preventDefault();
+            }
+            lastTouchEnd = now;
+        }, false);
+        
+        // Security Features
+        document.addEventListener('contextmenu', e => e.preventDefault());
+        document.addEventListener('selectstart', e => {
+            if (e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA') {
+                e.preventDefault();
+            }
+        });
+        document.addEventListener('dragstart', e => {
+            if (e.target.tagName === 'IMG') e.preventDefault();
+        });
+        
         // Handle window resize and orientation changes
         let resizeTimer;
         window.addEventListener('resize', function() {
             clearTimeout(resizeTimer);
             resizeTimer = setTimeout(function() {
-                // Check if device type changed (e.g., browser window resized to mobile size)
-                const isMobile = /android|webos|iphone|ipod|blackberry|iemobile|opera mini/i.test(navigator.userAgent.toLowerCase());
-                const isTablet = /ipad|android(?!.*mobile)|tablet/i.test(navigator.userAgent.toLowerCase());
+                // Re-evaluate device type on window resize
+                const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+                const mobileRegex = /android|webos|iphone|ipod|blackberry|iemobile|opera mini|mobile|phone/i;
+                const isMobile = mobileRegex.test(userAgent.toLowerCase());
+                const tabletRegex = /ipad|tablet|playbook|silk|(android(?!.*mobile))/i;
+                const isTablet = tabletRegex.test(userAgent.toLowerCase());
                 const isSmallScreen = window.innerWidth <= 768;
+                const hasTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
                 
-                if (isMobile && !isTablet && isSmallScreen) {
-                    // Reload to get mobile version
-                    if (!document.body.classList.contains('mobile-version')) {
-                        location.reload();
+                const shouldShowMobile = (isMobile && !isTablet) || (isSmallScreen && hasTouch && !isTablet);
+                
+                const desktopContent = document.getElementById('desktop-content');
+                const mobileContent = document.getElementById('mobile-content');
+                
+                if (shouldShowMobile !== window.isMobileDevice) {
+                    window.isMobileDevice = shouldShowMobile;
+                    
+                    if (window.isMobileDevice) {
+                        if (desktopContent) desktopContent.style.display = 'none';
+                        if (mobileContent) mobileContent.style.display = 'block';
+                        document.body.classList.remove('desktop-version');
+                        document.body.classList.add('mobile-version');
+                    } else {
+                        if (mobileContent) mobileContent.style.display = 'none';
+                        if (desktopContent) desktopContent.style.display = 'block';
+                        document.body.classList.remove('mobile-version');
+                        document.body.classList.add('desktop-version');
                     }
                 }
             }, 250);
