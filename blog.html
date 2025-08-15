@@ -1,6 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script>
+        // Device detection
+        function isMobileDevice() {
+            const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+            const mobileRegex = /android|webos|iphone|ipod|blackberry|iemobile|opera mini|mobile|phone/i;
+            const isMobile = mobileRegex.test(userAgent.toLowerCase());
+            const tabletRegex = /ipad|tablet|playbook|silk|(android(?!.*mobile))/i;
+            const isTablet = tabletRegex.test(userAgent.toLowerCase());
+            const isSmallScreen = window.innerWidth <= 768;
+            const hasTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+            return (isMobile && !isTablet) || (isSmallScreen && hasTouch && !isTablet);
+        }
+        
+        // Apply class on load
+        window.addEventListener('DOMContentLoaded', function() {
+            if (isMobileDevice()) {
+                document.body.classList.add('mobile-version');
+            } else {
+                document.body.classList.add('desktop-version');
+            }
+        });
+    </script>
+    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Journal - BM Rayan</title>
@@ -49,6 +72,101 @@
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=block" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+    
+    <!-- Mobile-specific styles -->
+    <style>
+        /* Mobile version adjustments */
+        @media (max-width: 768px), .mobile-version {
+            .layout-wrapper {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                width: 100%;
+                height: auto;
+                max-height: none;
+                z-index: 1000;
+                background: white;
+                box-shadow: 0 2px 4px rgba(80, 0, 0, 0.1);
+            }
+            
+            .sidebar-content {
+                padding: 1rem;
+            }
+            
+            .back-navigation {
+                margin-bottom: 1rem;
+            }
+            
+            .journal-profile {
+                text-align: center;
+                padding: 1rem 0;
+            }
+            
+            .journal-title {
+                font-size: 1.5rem;
+            }
+            
+            .journal-description {
+                font-size: 0.9rem;
+            }
+            
+            .post-navigation {
+                display: none;
+            }
+            
+            .main-content {
+                margin-left: 0;
+                padding-top: 200px;
+                padding: 1rem;
+                margin-top: 150px;
+            }
+            
+            .blog-post-card {
+                padding: 1.5rem;
+                margin-bottom: 1.5rem;
+            }
+            
+            .post-title {
+                font-size: 1.3rem;
+            }
+            
+            .post-content {
+                font-size: 0.9rem;
+                line-height: 1.6;
+            }
+        }
+        
+        /* Hide mobile elements on desktop */
+        .desktop-version .mobile-only {
+            display: none;
+        }
+        
+        /* Hide desktop elements on mobile */
+        .mobile-version .desktop-only {
+            display: none;
+        }
+        
+        .mobile-version .post-navigation {
+            display: none;
+        }
+        
+        .mobile-version .sidebar {
+            position: sticky;
+            top: 0;
+            width: 100%;
+            height: auto;
+        }
+        
+        .mobile-version .main-content {
+            margin-left: 0;
+            width: 100%;
+        }
+    </style>
 </head>
 <body>
     <div class="layout-wrapper">
