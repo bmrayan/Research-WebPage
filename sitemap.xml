@@ -1,35 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-        xmlns:news="http://www.google.com/schemas/sitemap-news/0.9"
-        xmlns:xhtml="http://www.w3.org/1999/xhtml"
-        xmlns:mobile="http://www.google.com/schemas/sitemap-mobile/1.0"
-        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"
-        xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">
-
-    <!-- Main Homepage -->
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
     <url>
         <loc>https://bmrayan.com/</loc>
-        <lastmod>2025-01-22</lastmod>
-        <changefreq>weekly</changefreq>
+        <lastmod>2025-08-14</lastmod>
+        <changefreq>monthly</changefreq>
         <priority>1.0</priority>
         <image:image>
             <image:loc>https://bmrayan.com/assets/images/photos/Light%20HS25.jpg</image:loc>
-            <image:caption>Mohamed Rayan Barhdadi - Researcher Profile Photo</image:caption>
             <image:title>Mohamed Rayan Barhdadi</image:title>
-        </image:image>
-        <image:image>
-            <image:loc>https://bmrayan.com/assets/images/photos/MAINPIC.jpeg</image:loc>
-            <image:caption>Mohamed Rayan Barhdadi Research Photo</image:caption>
+            <image:caption>Mohamed Rayan Barhdadi - Machine Learning and Computer Vision Researcher</image:caption>
         </image:image>
     </url>
-
-    <!-- Blog/Journal Page -->
     <url>
         <loc>https://bmrayan.com/blog.html</loc>
-        <lastmod>2025-01-22</lastmod>
-        <changefreq>monthly</changefreq>
+        <lastmod>2025-08-14</lastmod>
+        <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
-
-
 </urlset>

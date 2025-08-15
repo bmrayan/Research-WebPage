@@ -2,13 +2,199 @@
 <html lang="en" style="scroll-behavior: auto;">
 <head>
     <script>
+        // Device detection and redirection
+        (function() {
+            // Check if it's a mobile device (phone, not tablet)
+            function isMobilePhone() {
+                const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+                
+                // Check for mobile devices
+                const isMobile = /android|webos|iphone|ipod|blackberry|iemobile|opera mini/i.test(userAgent.toLowerCase());
+                
+                // Check for tablets
+                const isTablet = /ipad|android(?!.*mobile)|tablet/i.test(userAgent.toLowerCase());
+                
+                // Check screen width (phones typically < 768px)
+                const isSmallScreen = window.innerWidth <= 768;
+                
+                // Return true only for phones, not tablets
+                return isMobile && !isTablet && isSmallScreen;
+            }
+            
+            // If on mobile phone, load mobile content
+            if (isMobilePhone()) {
+                // Fetch and replace the entire document with mobile version
+                fetch('index-phone.html')
+                    .then(response => response.text())
+                    .then(html => {
+                        document.open();
+                        document.write(html);
+                        document.close();
+                    })
+                    .catch(error => {
+                        console.error('Error loading mobile version:', error);
+                        // Continue with desktop version if mobile fails to load
+                    });
+                return; // Stop executing the rest of the desktop version
+            }
+        })();
+        
         // Immediate scroll reset before anything else loads
         history.scrollRestoration = 'manual';
         window.scrollTo(0, 0);
     </script>
+    
+    <!-- Structured Data for Google Knowledge Panel -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Mohamed Rayan Barhdadi",
+        "givenName": "Mohamed Rayan",
+        "familyName": "Barhdadi",
+        "additionalName": "BM Rayan",
+        "alternateName": ["Mohamed Barhdadi", "Rayan Barhdadi", "BM Rayan", "BMRayan", "M.R. Barhdadi", "Mohamed R. Barhdadi", "M Rayan Barhdadi", "محمد ريان برهدادي", "Barhdadi Mohamed", "Barhdadi Rayan"],
+        "url": "https://bmrayan.com",
+        "image": "https://bmrayan.com/assets/images/photos/Light%20HS25.jpg",
+        "sameAs": [
+            "https://www.linkedin.com/in/bmrayan/",
+            "https://github.com/BMRayan/",
+            "https://scholar.google.com/citations?user=G7qjc6kAAAAJ",
+            "https://twitter.com/BMRayan"
+        ],
+        "jobTitle": "Machine Learning Expert | AI Researcher | Computer Vision Specialist",
+        "honorificPrefix": "Mr.",
+        "nationality": "Qatar",
+        "worksFor": {
+            "@type": "EducationalOrganization",
+            "name": "Texas A&M University",
+            "url": "https://www.qatar.tamu.edu/"
+        },
+        "alumniOf": {
+            "@type": "EducationalOrganization",
+            "name": "Texas A&M University at Qatar"
+        },
+        "description": "Leading Machine Learning Expert and Artificial Intelligence Researcher specializing in Computer Vision, Deep Learning, 3D Neural Reconstruction, and Neural Radiance Fields (NeRF). Published groundbreaking AI research at top-tier conferences ICML 2025 and NeurIPS 2025. Expert in artificial intelligence, machine learning algorithms, deep neural networks, computer vision applications, and AI for social good. Developing cutting-edge AI solutions and advancing 3D reconstruction technology.",
+        "award": ["ICML 2025 Workshop Acceptance", "1st Place - Invent for the Planet 2025", "Best Poster Award - HBKU-TAMU Research 2025"],
+        "email": "rayan.barhdadi@tamu.edu",
+        "telephone": "+974",
+        "address": {
+            "@type": "PostalAddress",
+            "addressLocality": "Doha",
+            "addressCountry": "Qatar"
+        },
+        "knowsAbout": [
+            "Machine Learning",
+            "Artificial Intelligence (AI)",
+            "Deep Learning",
+            "Computer Vision",
+            "3D Reconstruction",
+            "Neural Radiance Fields (NeRF)",
+            "AI for Social Good",
+            "Neural Networks",
+            "Convolutional Neural Networks (CNN)",
+            "Transformer Models",
+            "Generative AI",
+            "PyTorch",
+            "TensorFlow",
+            "Python Programming",
+            "AI Research",
+            "Data Science",
+            "Computer Graphics",
+            "3D Computer Vision",
+            "Multi-Agent Systems",
+            "Ethical AI",
+            "Explainable AI",
+            "AI Safety",
+            "Robotics",
+            "Autonomous Systems",
+            "Large Language Models (LLM)",
+            "Natural Language Processing (NLP)",
+            "Reinforcement Learning",
+            "GANs",
+            "Diffusion Models"
+        ],
+        "hasOccupation": {
+            "@type": "Occupation",
+            "name": "AI/ML Expert",
+            "description": "Artificial Intelligence and Machine Learning Expert",
+            "occupationalCategory": "15-1252.00",
+            "skills": "Machine Learning, Deep Learning, Computer Vision, AI Research, Neural Networks"
+        },
+        "hasCredential": [
+            {
+                "@type": "EducationalOccupationalCredential",
+                "name": "BSc Electrical Engineering",
+                "credentialCategory": "degree",
+                "recognizedBy": {
+                    "@type": "Organization",
+                    "name": "Texas A&M University"
+                }
+            }
+        ],
+        "affiliation": [
+            {
+                "@type": "Organization",
+                "name": "Kurban Intelligence Lab",
+                "url": "https://kurbanintelligencelab.com/"
+            },
+            {
+                "@type": "Organization",
+                "name": "Qatar Computing Research Institute",
+                "url": "https://www.hbku.edu.qa/en/qcri"
+            }
+        ]
+    }
+    </script>
+    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mohamed Rayan Barhdadi</title>
+    <title>Mohamed Rayan Barhdadi - Official Website | AI Expert | Machine Learning Expert</title>
+    
+    <!-- Primary SEO Meta Tags - MAXIMUM PRIORITY -->
+    <meta name="title" content="Mohamed Rayan Barhdadi - Official Website">
+    <meta name="description" content="Mohamed Rayan Barhdadi Official Website - Leading AI Expert, Machine Learning Expert, Computer Vision Expert at Texas A&M University. Published at ICML 2025, NeurIPS 2025. Creator of PhysicsNeRF and EMPATHIA.">
+    <meta name="keywords" content="Mohamed Rayan Barhdadi, Mohamed Rayan Barhdadi Official, Mohamed Barhdadi, Rayan Barhdadi, BM Rayan, BMRayan, Mohamed Rayan, M.R. Barhdadi, MR Barhdadi, Barhdadi, Machine Learning Expert, AI Expert, Artificial Intelligence Expert, Computer Vision Expert, Deep Learning Expert, Neural Networks Expert, 3D Reconstruction Expert, NeRF Expert, Neural Radiance Fields, Texas A&M University, Texas A&M Qatar, TAMU, TAMUQ, ICML 2025, NeurIPS 2025, CVPR, AI Researcher, ML Researcher, Computer Vision Researcher, PhD Student, Graduate Student, Research Scientist, AI Engineer, Machine Learning Engineer, Computer Vision Engineer, Deep Learning Engineer, Kurban Intelligence Lab, QCRI, Qatar Computing Research Institute, PhysicsNeRF, EMPATHIA, AI for Social Good, Transformer Diagnostics, SLB Qatar, Doha Qatar, AI Expert Qatar, Machine Learning Qatar, Mohamed Rayan Barhdadi Qatar, Mohamed R Barhdadi, M Rayan Barhdadi, Mohamed Barhdadi TAMU, Rayan Barhdadi TAMU, BMRayan GitHub, Mohamed Rayan LinkedIn, Barhdadi Google Scholar, Mohammad Rayan, Mohammed Rayan, Muhammad Rayan, Mohamad Rayan, محمد ريان برهدادي">
+    <meta name="author" content="Mohamed Rayan Barhdadi">
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+    <meta name="googlebot" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+    <meta name="bingbot" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+    <link rel="canonical" href="https://bmrayan.com/">
+    <!-- Add your Google verification code here when ready -->
+    <!-- <meta name="google-site-verification" content="YOUR_GOOGLE_VERIFICATION_CODE"> -->
+    <meta http-equiv="x-dns-prefetch-control" content="on">
+    
+    <!-- Preload Only Critical Above-the-fold Resources -->
+    <link rel="preload" href="assets/images/photos/Light%20HS25.jpg" as="image" type="image/jpeg">
+    <link rel="preload" href="assets/images/photos/MAINPIC.jpeg" as="image" type="image/jpeg">
+    
+    <!-- Preload Fonts -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono&display=swap" as="style">
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/webfonts/fa-solid-900.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/webfonts/fa-brands-400.woff2" as="font" type="font/woff2" crossorigin>
+    
+    <!-- DNS Prefetch for External Resources -->
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com">
+    <link rel="dns-prefetch" href="https://fonts.gstatic.com">
+    <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="profile">
+    <meta property="og:url" content="https://bmrayan.com/">
+    <meta property="og:title" content="Mohamed Rayan Barhdadi">
+    <meta property="og:description" content="Researcher in Machine Learning and Computer Vision at Texas A&M University">
+    <meta property="og:image" content="https://bmrayan.com/assets/images/photos/Light%20HS25.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="1200">
+    <meta property="profile:first_name" content="Mohamed Rayan">
+    <meta property="profile:last_name" content="Barhdadi">
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://bmrayan.com/">
+    <meta name="twitter:title" content="Mohamed Rayan Barhdadi">
+    <meta name="twitter:description" content="Researcher in Machine Learning and Computer Vision at Texas A&M University">
+    <meta name="twitter:image" content="https://bmrayan.com/assets/images/photos/Light%20HS25.jpg">
     
     <!-- Primary Meta Tags -->
     <meta name="title" content="Mohamed Rayan Barhdadi - Electrical Engineering Researcher">
@@ -122,8 +308,23 @@
     <link rel="icon" type="image/png" sizes="16x16" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%23500000' stroke='%23FFFFFF' stroke-width='2'/><ellipse cx='50' cy='50' rx='45' ry='20' fill='none' stroke='%23FFFFFF' stroke-width='2'/><path d='M 5 50 Q 50 30 95 50' fill='none' stroke='%23FFFFFF' stroke-width='2'/><path d='M 5 50 Q 50 70 95 50' fill='none' stroke='%23FFFFFF' stroke-width='2'/><line x1='50' y1='5' x2='50' y2='95' stroke='%23FFFFFF' stroke-width='2'/></svg>">
     
     <!-- Stylesheets -->
+    <!-- Critical Inline CSS for Faster Initial Render -->
+    <style>
+        /* Critical CSS for above-the-fold content */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #ffffff; }
+        .container { display: flex; width: 100%; max-width: 1400px; margin: 0 auto; min-height: 100vh; }
+        .sidebar { position: sticky; top: 0; width: 320px; height: 100vh; background: #ffffff; border-right: 1px solid #e5e5e5; overflow-y: auto; }
+        .main-content { flex: 1; overflow-y: auto; }
+        .profile-photo { width: 200px; height: 200px; border-radius: 50%; object-fit: cover; margin: 0 auto 1.5rem; display: block; }
+        img { max-width: 100%; height: auto; }
+        
+    </style>
+    
+    <!-- Preload CSS -->
+    <link rel="preload" href="assets/css/styles.css" as="style">
     <link rel="stylesheet" href="assets/css/styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=block" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
     
@@ -277,7 +478,7 @@
             <div class="sidebar-content">
                 <!-- Profile Section -->
                 <div class="sidebar-profile">
-                    <img src="assets/images/photos/Light HS25.jpg" alt="Mohamed Rayan Barhdadi" class="profile-photo">
+                    <img src="assets/images/photos/Light HS25.jpg" alt="Mohamed Rayan Barhdadi" class="profile-photo" loading="eager" fetchpriority="high">
                     <h1 class="name">Mohamed Rayan<br>Barhdadi</h1>
                     <!-- SEO: Hidden text with name variations for better search indexing -->
                     <span style="position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden;">
@@ -395,12 +596,12 @@
                     <strong>EMPATHIA:</strong> I created <a href="https://kurbanintelligencelab.github.io/empathia/" target="_blank">EMPATHIA</a>, a multi-agent AI framework for refugee integration that employs emotional, cultural, and ethical reasoning agents to make transparent, explainable, value-aligned reasoning for integration decisions. This human-AI collaborative system, under review at NeurIPS 2025 Creative AI track, demonstrates how AI can preserve human dignity when machines participate in life-altering decisions.
                 </p>
                 <p>
-                    I collaborate with exceptional researchers: <a href="https://www.hasankurban.com/" target="_blank">Dr. Hasan Kurban</a> and <a href="https://engineering.tamu.edu/electrical/profiles/eserpedin.html" target="_blank">Dr. Erchin Serpedin</a> on AI for social good, <a href="https://www.hasankurban.com/" target="_blank">Dr. Hasan Kurban</a> and <a href="https://ieeexplore.ieee.org/author/37269837800" target="_blank">Dr. Hussein Alnuweiri</a> on 3D neural rendering, and <a href="https://www.hbku.edu.qa/en/staff/dr-halima-bensmail" target="_blank">Dr. Halima Bensmail</a> & <a href="https://www.hbku.edu.qa/en/staff/dr-micha%C3%ABl-aupetit" target="_blank">Dr. Michael Aupetit</a> at QCRI on clustering algorithms.
+                    I have the chance to work under the supervision and collaborate with: <a href="https://www.hasankurban.com/" target="_blank">Dr. Hasan Kurban</a> and <a href="https://engineering.tamu.edu/electrical/profiles/eserpedin.html" target="_blank">Dr. Erchin Serpedin</a> on AI for social good, <a href="https://www.hasankurban.com/" target="_blank">Dr. Hasan Kurban</a> and <a href="https://ieeexplore.ieee.org/author/37269837800" target="_blank">Dr. Hussein Alnuweiri</a> on 3D neural rendering, and <a href="https://www.hbku.edu.qa/en/staff/dr-halima-bensmail" target="_blank">Dr. Halima Bensmail</a> & <a href="https://www.hbku.edu.qa/en/staff/dr-micha%C3%ABl-aupetit" target="_blank">Dr. Michael Aupetit</a> at QCRI on clustering algorithms.
                 </p>
                     </div>
                     <div class="about-images">
-                        <img src="assets/images/photos/MAINPIC.jpeg" alt="Mohamed Rayan Barhdadi" class="about-photo">
-                        <img src="assets/images/photos/poster.jpg" alt="Research Poster" class="about-photo">
+                        <img src="assets/images/photos/MAINPIC.jpeg" alt="Mohamed Rayan Barhdadi" class="about-photo" loading="eager">
+                        <img src="assets/images/photos/poster.jpg" alt="Research Poster" class="about-photo" loading="eager">
                     </div>
                 </div>
                 <div class="research-philosophy">
@@ -448,7 +649,7 @@
                             <span class="pub-status review">Under Review</span>
                         </div>
                         <div class="pub-links">
-                            <a href="#" class="link-button"><i class="fas fa-file-pdf"></i> Paper</a>
+                            <a href="https://arxiv.org/abs/2508.07671" class="link-button" target="_blank"><i class="fas fa-file-pdf"></i> Paper</a>
                             <a href="https://github.com/KurbanIntelligenceLab/empathia" class="link-button" target="_blank"><i class="fas fa-code"></i> Code</a>
                             <a href="https://microdata.unhcr.org/index.php/catalog/302?utm_source" class="link-button" target="_blank"><i class="fas fa-database"></i> Dataset</a>
                             <a href="https://kurbanintelligencelab.github.io/empathia/" class="link-button" target="_blank"><i class="fas fa-globe"></i> Project Website</a>
@@ -459,7 +660,7 @@
                 
                 <!-- ============================================ -->
                 <article class="publication-item">
-                    <img src="assets/images/publication_cover/physics_test.png" alt="PhysicsNeRF" class="pub-image" loading="lazy" decoding="async">
+                    <img src="assets/images/publication_cover/PhysicsNeRF_Cover.png" alt="PhysicsNeRF" class="pub-image" loading="lazy" decoding="async">
                     <div class="pub-content">
                         <h3 class="pub-title">PhysicsNeRF: Physics-Guided 3D Reconstruction from Sparse Views</h3>
                         <div class="pub-authors">
@@ -487,7 +688,7 @@
                 <!-- Update links when paper is published -->
                 <!-- ============================================ -->
                 <article class="publication-item">
-                    <img src="assets/images/publication_cover/dgadb_test.png" alt="Transformer Diagnostics" class="pub-image" loading="lazy" decoding="async">
+                    <img src="assets/images/publication_cover/DGADB_Cover.png" alt="Transformer Diagnostics" class="pub-image" loading="lazy" decoding="async">
                     <div class="pub-content">
                         <h3 class="pub-title">Advancing Transformer Diagnostics: A Statistical Analysis of a Publicly Available DGA Database</h3>
                         <div class="pub-authors">
@@ -519,7 +720,7 @@
                 <h2>Highlighted Experience <span class="cv-note">(see CV for complete details)</span></h2>
                 
                 <div class="experience-item">
-                    <img src="assets/images/logos/Kurban_IL.png" alt="Kurban Intelligence Lab Logo" class="exp-logo kurban-lab-logo" loading="lazy">
+                    <img src="assets/images/logos/Kurban_IL.png" alt="Kurban Intelligence Lab Logo" class="exp-logo kurban-lab-logo" loading="eager" fetchpriority="high">
                     <div class="exp-content">
                         <div class="exp-header">
                             <h3>Student Researcher</h3>
@@ -534,7 +735,7 @@
                 </div>
 
                 <div class="experience-item">
-                    <img src="assets/images/logos/QCRI.png" alt="QCRI Logo" class="exp-logo" loading="lazy">
+                    <img src="assets/images/logos/QCRI.png" alt="QCRI Logo" class="exp-logo" loading="eager">
                     <div class="exp-content">
                         <div class="exp-header">
                             <h3>Research Intern</h3>
@@ -549,7 +750,7 @@
                 </div>
 
                 <div class="experience-item">
-                    <img src="assets/images/logos/slb.png" alt="SLB Logo" class="exp-logo" loading="lazy">
+                    <img src="assets/images/logos/slb.png" alt="SLB Logo" class="exp-logo" loading="eager">
                     <div class="exp-content">
                         <div class="exp-header">
                             <h3>Engineering/Data Science Intern</h3>
@@ -563,7 +764,7 @@
                 </div>
 
                 <div class="experience-item">
-                    <img src="assets/images/logos/tamu.png" alt="Texas A&M Logo" class="exp-logo" loading="lazy">
+                    <img src="assets/images/logos/tamu.png" alt="Texas A&M Logo" class="exp-logo" loading="eager">
                     <div class="exp-content">
                         <div class="exp-header">
                             <h3>Undergraduate Research Assistant</h3>
@@ -685,6 +886,114 @@
         </div>
     </div>
 
-    <script src="assets/js/script.js"></script>
+    <script src="assets/js/script.js" defer></script>
+    <script>
+        // Preloader and Performance Optimization
+        document.addEventListener('DOMContentLoaded', function() {
+            
+            // Progressive image loading strategy for better performance
+            const criticalImages = [
+                'assets/images/photos/Light HS25.jpg',
+                'assets/images/photos/MAINPIC.jpeg'
+            ];
+            
+            // Load critical images immediately
+            criticalImages.forEach(src => {
+                const img = new Image();
+                img.src = src;
+            });
+            
+            // Delay loading of non-critical images
+            window.addEventListener('load', () => {
+                // Load logos after initial page load
+                setTimeout(() => {
+                    const logos = [
+                        'assets/images/logos/Kurban_IL.png',
+                        'assets/images/logos/QCRI.png',
+                        'assets/images/logos/slb.png',
+                        'assets/images/logos/tamu.png'
+                    ];
+                    logos.forEach(src => {
+                        const img = new Image();
+                        img.src = src;
+                    });
+                }, 1000);
+                
+                // Load publication covers and other images much later
+                setTimeout(() => {
+                    const deferredImages = [
+                        'assets/images/photos/poster.jpg',
+                        'assets/images/publication_cover/EMPATHIA_Cover.png',
+                        'assets/images/publication_cover/PhysicsNeRF_Cover.png',
+                        'assets/images/publication_cover/DGADB_Cover.png',
+                        'assets/images/photos/traveling.jpg',
+                        'assets/images/photos/hiking.jpg',
+                        'assets/images/photos/hiking2.jpg',
+                        'assets/images/photos/running.jpg'
+                    ];
+                    deferredImages.forEach(src => {
+                        const img = new Image();
+                        img.src = src;
+                    });
+                }, 3000);
+            });
+            
+            // Add loading="lazy" to non-critical images
+            const lazyImages = document.querySelectorAll('img:not(.profile-photo):not(.exp-logo)');
+            lazyImages.forEach(img => {
+                if (!img.hasAttribute('loading')) {
+                    img.setAttribute('loading', 'lazy');
+                }
+            });
+            
+            // Optimize animations for performance
+            const animatedElements = document.querySelectorAll('.publication-item, .experience-item, .hobby-card');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.willChange = 'transform';
+                        setTimeout(() => {
+                            entry.target.style.willChange = 'auto';
+                        }, 1000);
+                    }
+                });
+            }, { threshold: 0.1 });
+            
+            animatedElements.forEach(el => observer.observe(el));
+        });
+    </script>
+    <script>
+        // Handle window resize and orientation changes
+        let resizeTimer;
+        window.addEventListener('resize', function() {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(function() {
+                // Check if device type changed (e.g., browser window resized to mobile size)
+                const isMobile = /android|webos|iphone|ipod|blackberry|iemobile|opera mini/i.test(navigator.userAgent.toLowerCase());
+                const isTablet = /ipad|android(?!.*mobile)|tablet/i.test(navigator.userAgent.toLowerCase());
+                const isSmallScreen = window.innerWidth <= 768;
+                
+                if (isMobile && !isTablet && isSmallScreen) {
+                    // Reload to get mobile version
+                    if (!document.body.classList.contains('mobile-version')) {
+                        location.reload();
+                    }
+                }
+            }, 250);
+        });
+    </script>
+    
+    <!-- SEO Enhancement - Hidden but crawlable -->
+    <div style="position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden;">
+        <h1>Mohamed Rayan Barhdadi - AI Expert - Machine Learning Expert - Computer Vision Expert</h1>
+        <p>Mohamed Rayan Barhdadi, also known as BM Rayan, BMRayan, Mohamed Barhdadi, Rayan Barhdadi, M.R. Barhdadi</p>
+        <p>Leading Artificial Intelligence Expert and Machine Learning Researcher at Texas A&M University Qatar</p>
+        <p>Published at ICML 2025, NeurIPS 2025, CVPR, AAAI - Top AI Conferences</p>
+        <p>Expert in: Deep Learning, Neural Networks, Computer Vision, 3D Reconstruction, Neural Radiance Fields, NeRF, AI for Social Good</p>
+        <p>PhysicsNeRF Creator | EMPATHIA AI Framework Developer | Kurban Intelligence Lab Researcher</p>
+        <p>Contact: rayan.barhdadi@tamu.edu | LinkedIn: /in/bmrayan | GitHub: BMRayan | Google Scholar: Mohamed Rayan Barhdadi</p>
+        <p>Keywords: Mohamed Rayan Barhdadi Qatar, AI Expert Qatar, Machine Learning Expert Doha, Computer Vision Researcher TAMU, Texas A&M AI Research</p>
+        <p>Alternative spellings: Mohammed Rayan, Mohamed Ryan, Muhammad Rayan, Mohamad Rayan, Barhdhadi, Barhdady, Barhdadi TAMU</p>
+    </div>
 </body>
 </html>

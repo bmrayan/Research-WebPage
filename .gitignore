@@ -1,75 +1,42 @@
 # Operating System Files
 .DS_Store
-.DS_Store?
-._*
-.Spotlight-V100
-.Trashes
-ehthumbs.db
 Thumbs.db
+desktop.ini
 
-# IDE and Editor Files
+# IDE Files
 .vscode/
 .idea/
-*.swp
-*.swo
-*~
+*.sublime-project
+*.sublime-workspace
 
 # Temporary Files
 *.tmp
 *.temp
 *.log
+*.cache
+*~
 
-# Node.js (if using for development)
+# Node modules (if any)
 node_modules/
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
 
-# Build Files
+# Build outputs
 dist/
 build/
 
-# Backup Files
-*.bak
-*.backup
-*.orig
-
-# Personal Files (uncomment if needed)
-# personal_notes.txt
-# draft_*
-# private/
-
-# Large Files (uncomment if you have large assets)
-# *.zip
-# *.rar
-# *.7z
-
-# Development Tools
-.sass-cache/
-.jekyll-cache/
-.bundle/
-vendor/
-
-# Custom (add your specific ignore rules below)
-
-# Security and Sensitive Files
+# Environment files
 .env
 .env.local
-.env.production
-*.key
-*.pem
-*.p12
-*.pfx
-config/secrets.json
-secrets/
-credentials/
 
-# Personal Information
-personal_info.json
-private_config.js
-api_keys.txt
+# Backup files
+*.bak
+*.backup
+*.old
 
-# Backup Files with Potential Sensitive Data
-*.sql
-*.db-backup
-*.dump
+# Test files
+test/
+tests/
+*.test.*
+
+# Documentation drafts
+*.draft.*
+_drafts/
