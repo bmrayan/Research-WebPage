@@ -292,6 +292,11 @@ h5.title {
   margin-top: 0px;
 }
 
+.title {
+  font-weight: 700;
+  color: #000000;
+}
+
 .title a {
   color: #000000;
   font-weight: 700;
@@ -355,6 +360,11 @@ h5.title {
 
 .publication-files {
   margin-top: 10px;
+}
+
+.publication-files a,
+.publication-files .text-muted {
+  margin-right: 10px;
 }
 
 .coauthor {
