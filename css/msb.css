@@ -43,6 +43,10 @@
 
 /* general body properties */
 
+html, body {
+    overflow-x: hidden;
+}
+
 body {
     /* This defaults to Helvetica Neue if the viewer has it installed (e.g., Macs)
        and use a lighter font weight. If they don't have it, we use a decent font from Google Web Fonts. */
@@ -167,7 +171,7 @@ h5 {
         width: 100% !important;
     }
     #msbnav .navbar-brand {
-        font-size: 1.25em;
+        font-size: 1em;
         margin-left: -10px;
         padding-top: 0;
         padding-bottom: 0;
@@ -177,6 +181,8 @@ h5 {
         height: auto !important;
         line-height: 1.3;
         float: none;
+        max-height: 2.6em;
+        overflow: hidden;
     }
     .navbar-brand, .navbar-nav li a {
         height: auto !important;
@@ -190,6 +196,9 @@ h5 {
     }
     #msb-img {
         height: 400px !important;
+    }
+    .pub-authors .nowrap {
+        white-space: normal;
     }
 }
 
