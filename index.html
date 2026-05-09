@@ -7,10 +7,281 @@
     <meta charset="UTF-8">
     <link rel="icon" type="image/svg+xml" href="img/favicon.svg">
 
-    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Raleway:wght@600&display=swap" onload="this.onload=null;this.rel='stylesheet'">
-    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Raleway:wght@600&display=swap"></noscript>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&display=swap" rel="stylesheet">
     <link href="css/bootstrap.css" rel="stylesheet">
     <link href="css/msb.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fragment+Mono&display=swap" rel="stylesheet">
+    <style>
+        html, body { background: #f7f7f5 !important; margin: 0 !important; padding: 0 !important; }
+        body { padding-top: 75px !important; }
+        .main-row > .col-md-3 { padding-top: 13px; }
+        /* Keep profile image aspect ratio constant across devices */
+        #msb-img {
+            width: 100% !important;
+            height: auto !important;
+            aspect-ratio: 5 / 6 !important;
+            object-fit: cover !important;
+            object-position: center 20% !important;
+            display: block;
+        }
+        /* On iPad-vertical/tablet widths the col goes full width — cap image size */
+        @media (max-width: 991px) {
+            #msb-img-wrap {
+                max-width: 320px !important;
+                margin-left: 0 !important;
+                margin-right: 0 !important;
+            }
+            /* Split sidebar: image+email above Summary, socials/advisors below Research */
+            .main-row { flex-direction: column !important; display: flex !important; }
+            .main-row > .col-md-3 { display: contents; }
+            .main-row .sb-top {
+                order: -1 !important;
+                padding: 0 15px !important;
+                margin-top: -12px !important;
+                width: 100%;
+            }
+            .main-row .sb-top > .row { margin-top: 0; }
+            .main-row .sb-top .vital-info:last-child { margin-bottom: 22px !important; }
+            .main-row > .col-md-9 { order: 0 !important; }
+            .main-row .sb-bottom {
+                order: 1 !important;
+                padding: 0 15px;
+                width: 100%;
+                margin-top: 28px;
+            }
+        }
+        #msbnav {
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            right: 0 !important;
+            width: auto !important;
+            max-width: none !important;
+            margin: 0 !important;
+            background: #500000 !important;
+            box-sizing: border-box !important;
+            z-index: 1030;
+            padding-left: 22px !important;
+            padding-right: 22px !important;
+        }
+        #msbnav .container {
+            max-width: 100%;
+            padding-left: 0 !important;
+            padding-right: 0 !important;
+        }
+        #msbnav .navbar-brand {
+            font-size: clamp(0.95rem, 3.4vw, 2.5em) !important;
+            line-height: 1.15 !important;
+            margin-left: 0 !important;
+            white-space: normal !important;
+            max-width: 100%;
+            padding-right: 8px;
+        }
+        #msbnav .navbar-brand a {
+            display: inline-block;
+            white-space: normal;
+        }
+        #msbnav .nb-name, #msbnav .nb-aff { white-space: nowrap; }
+        /* Allow wrap at the separator on iPad-vertical and below */
+        @media (max-width: 900px) {
+            #msbnav .nb-sep {
+                display: block;
+                font-size: 0;
+                line-height: 0;
+                height: 4px;
+            }
+            #msbnav .navbar-brand { font-size: 2.4rem !important; }
+            #msbnav .container { padding-top: 12px !important; padding-bottom: 12px !important; }
+            body { padding-top: 122px !important; }
+        }
+        @media (max-width: 600px) {
+            #msbnav .navbar-brand { font-size: 2.1rem !important; line-height: 1.05 !important; }
+            #msbnav .container { padding-top: 10px !important; padding-bottom: 10px !important; }
+            body { padding-top: 102px !important; }
+        }
+        /* Light grey line above the social links (separates email block from socials/advisors) */
+        .sb-bottom > .vital-info:first-child {
+            border-top: 1px solid rgba(16,16,16,0.12);
+            padding-top: 14px;
+            margin-top: 14px;
+        }
+        body, h1, h2, h3, h4, h5, h6, p, span, div, a, li, em, strong, .lead, .navbar-brand {
+            font-family: 'Instrument Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+        }
+
+        /* Section titles (v2-style: 01 / Title / sub) */
+        .section-head {
+            display: flex;
+            align-items: baseline;
+            column-gap: 16px;
+            row-gap: 2px;
+            margin: 1.8em 0 0.6em;
+            flex-wrap: wrap;
+        }
+        .col-md-9 > .section-head:first-child { margin-top: 5px; }
+        .section-num {
+            font-size: 12px;
+            color: #500000;
+            letter-spacing: 0.14px;
+            flex-shrink: 0;
+        }
+        .section-head h2 {
+            font-size: 32px !important;
+            line-height: 1.1 !important;
+            letter-spacing: -0.03em !important;
+            font-weight: 600 !important;
+            margin: 0 !important;
+            color: #101010 !important;
+            font-family: 'Instrument Sans', system-ui, sans-serif !important;
+        }
+        .section-sub {
+            font-size: 14px;
+            color: #6a6b6a;
+            margin-left: auto;
+            font-style: italic;
+        }
+        @media (max-width: 600px) {
+            .section-head h2 { font-size: 26px !important; }
+        }
+        /* When the long "mountains..." subtitle wraps to its own line, left-align it */
+        @media (max-width: 800px) {
+            .hobbies-section .section-head .section-sub {
+                margin-left: 0 !important;
+            }
+        }
+
+        /* Advisor block (v2 visual, Instrument Sans throughout) */
+        .advisor-block-v2 { margin-top: 18px; }
+        .advisor-title-v2 {
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: -0.005em;
+            color: #101010;
+            margin-bottom: 8px;
+        }
+        .advisor-row-v2 {
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+            padding: 10px 0;
+            border-top: 1px solid rgba(16,16,16,0.10);
+        }
+        .advisor-img-v2 {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            object-fit: cover;
+            flex-shrink: 0;
+            border: 1px solid rgba(16,16,16,0.10);
+        }
+        .advisor-name-v2 {
+            font-size: 14px;
+            font-weight: 600;
+            letter-spacing: -0.01em;
+            color: #101010;
+            line-height: 1.3;
+        }
+        .advisor-name-v2 a { color: #500000; }
+        .advisor-aff-v2 {
+            font-size: 12px;
+            color: #6a6b6a;
+            line-height: 1.4;
+            margin-top: 2px;
+        }
+
+        /* Hobby images: 2-up, slightly wider columns, less tall */
+        .hobbies-row { gap: 40px !important; }
+        .hobbies-text { flex: 0 0 44% !important; }
+        .hobbies-grid-wrap { align-self: flex-start !important; }
+        .hobbies-grid {
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)) !important;
+            gap: 18px !important;
+            height: auto !important;
+        }
+        .hobby-image {
+            width: 100%;
+            height: auto !important;
+            aspect-ratio: 4 / 3;
+            object-fit: cover;
+        }
+        @media (max-width: 600px) {
+            .hobbies-grid { grid-template-columns: 1fr !important; max-width: 75% !important; }
+        }
+
+        /* Underline 'me' in author list (LaTeX \uline + \raisebox style) */
+        .papers .pub-authors .me {
+            text-decoration: underline;
+            text-decoration-thickness: 1px;
+            text-underline-offset: 2px;
+            position: relative;
+            top: -0.5px;
+        }
+
+        /* Paper cards (Apart-style gray rectangles) */
+        .papers .paper-row {
+            display: flex !important;
+            align-items: flex-start;
+            background: #ededea;
+            border-radius: 16px;
+            padding: 14px;
+            margin-left: 0 !important;
+            margin-right: 0 !important;
+            margin-bottom: 14px !important;
+            border: 1px solid rgba(16,16,16,0.06);
+        }
+        .papers .paper-row > [class*="col-"]:first-child {
+            padding-left: 0;
+        }
+        .papers .paper-row:last-of-type {
+            margin-bottom: 0 !important;
+        }
+        .papers .paper-row .paperimage {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            display: block;
+        }
+        .papers .paper-row > [class*="col-"]:first-child > a {
+            display: block;
+        }
+
+        /* News box (v1-style container, Instrument Sans font) */
+        .news-section-v2 { margin: 0; }
+        .news-scroll {
+            height: 175px;
+            overflow-y: auto;
+            overflow-x: hidden;
+            border: 1px solid #DDDDDD;
+            border-radius: 8px;
+            padding: 0 16px;
+            background-color: #FAFAFA;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(80,0,0,0.28) transparent;
+        }
+        .news-scroll::-webkit-scrollbar { width: 8px; }
+        .news-scroll::-webkit-scrollbar-track { background: transparent; }
+        .news-scroll::-webkit-scrollbar-thumb { background: rgba(80,0,0,0.22); border-radius: 4px; }
+        .news-scroll::-webkit-scrollbar-thumb:hover { background: rgba(80,0,0,0.45); }
+        .news-list-v2 { list-style: none; padding: 0; margin: 0; }
+        .news-item-v2 {
+            padding: 6px 0;
+            border-bottom: 1px solid #EEEEEE;
+            font-size: 15px;
+            line-height: 1.5;
+            color: #101010;
+        }
+        .news-item-v2:last-child { border-bottom: none; }
+        .news-date-v2 {
+            display: inline-block;
+            width: 70px;
+            margin-right: 18px;
+            color: #500000;
+            font-weight: 400;
+            white-space: nowrap;
+        }
+    </style>
 
 
 
@@ -27,7 +298,7 @@
     <div id="msbnav" class="navbar navbar-inverse navbar-static-top" role="navigation">
         <div class="container">
 	  <div class="navbar-brand">
-            <a href="#" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">Mohamed Rayan Barhdadi&nbsp;&middot;&nbsp;Texas A&amp;M</a>
+            <a href="#" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;"><span class="nb-name">Mohamed Rayan Barhdadi</span><span class="nb-sep">&nbsp;&middot;&nbsp;</span><span class="nb-aff">Texas A&amp;M</span></a>
 	  </div>
         </div>
     </div>
@@ -35,6 +306,11 @@
     <div class="container">
         <div class="row main-row">
             <div class="col-md-9">
+                <div class="section-head">
+                  <span class="section-num">01</span>
+                  <h2>Summary</h2>
+                  <span class="section-sub">vision &middot; cognition</span>
+                </div>
                 <!--<p>Computing platforms shape our interactions with each other, from friends, to organizations, to societies. Our research melds together insights from the social sciences with design and engineering to re-envision this relationship between technology and social behavior.</p>-->
                 <p><em>Vision:</em>&nbsp;The physical world is the first teacher. Long before language, biological intelligence learns through structured perception: tracking objects, predicting trajectories, inferring causality from interaction. Current AI skips this curriculum entirely. The dominant paradigm relies on scaling text-based models, and is hitting diminishing returns against the data wall, language-centrism, and the inability to learn beyond what is already written down. The intellectual trajectories of AI and cognitive science have long overlapped; today, the successes and failures of deep learning demand that we take this overlap seriously. <strong>My research asks which properties of physical reality and human cognition transfer to machine intelligence and perception, how they transfer, and why</strong>, not only to match human capabilities, but to identify the computational primitives that could allow systems to learn new things beyond current human knowledge through grounded interaction with the world. This question spans computer vision, representation learning, and cognitive science: <em>How should the structure of motion, objects, and causes inform what machines learn and in what order? Can the developmental ordering that biology converged on serve as a training curriculum for artificial systems? And when these systems are deployed in social settings, how do we ensure that they produce more equitable outcomes?</em></p>
 
@@ -46,61 +322,62 @@
 
 
 
-                <div class="row">
-                  <div class="col-md-12"><p class="lead">News</p></div>
+                <div class="section-head">
+                  <span class="section-num">02</span>
+                  <h2>News</h2>
+                  <span class="section-sub">recent updates</span>
                 </div>
 
-                <div class="news-box">
-                  <ul class="news-list">
-                    <li style="position: relative; padding-left: 46px; display: flex; align-items: flex-start; flex-wrap: wrap; min-height: 1.4em;"><img src="img/gifs/new-icon-gif-11.gif" alt="New" style="position: absolute; height: 1.4em; left: -6px; top: 5px;" /><span class="news-date">Mar 2026</span> <span style="flex: 1;">Attending&nbsp;<strong>EACL</strong>&nbsp;in Rabat, Morocco this week.</span></li>
-                    <!-- <li style="position: relative; padding-left: 46px; display: flex; align-items: flex-start; flex-wrap: wrap; min-height: 1.4em;"><img src="img/gifs/new-icon-gif-11.gif" alt="New" style="position: absolute; height: 1.4em; left: -6px; top: 5px;" /><span class="news-date">Mar 2026</span> <span style="flex: 1;">Accepted with full grant to attend&nbsp;<strong>ACVSS</strong>&nbsp;(Computer Vision Summer School) at&nbsp;<strong>Google</strong>&nbsp;in Accra, Ghana this summer.</span></li> -->
-
-
-                    <li><span class="news-date">Feb 2026</span> 2 new papers on <strong>arXiv</strong>, make sure to check them out!!</li>
-                    <li><span class="news-date">Jan 2026</span> Attending <strong>MenaML</strong> Machine Learning Winter School at <strong>KAUST</strong>.</li>
-                    <!-- <li><span class="news-date">Jan 2026</span> Awarded <strong>SREG</strong> TAMUQ Grant $50,000 (Cool projects coming up ;)</li> -->
-                    <li><span class="news-date">Dec 2025</span> Heading to San Diego to give a talk and present <strong>EMPATHIA</strong> at <strong>NeurIPS 2025</strong>.</li>
-                    <li><span class="news-date">Oct 2025</span> <strong>1st Place</strong> at QCRI Research Symposium!</li>
-                    <li><span class="news-date">Oct 2025</span> Gave a talk at <strong>MIT URTC</strong>!</li>
-                    <li><span class="news-date">Sep 2025</span> Visited <strong>EPFL</strong>!</li>
-                    <li><span class="news-date">Sep 2025</span> Paper accepted to <strong>NeurIPS 2025</strong> Proceedings!</li>
-                    <li><span class="news-date">Jul 2025</span> Paper accepted at <strong>ICML 2025</strong> Workshop!</li>
-                    <li><span class="news-date">Jun 2025</span> Started internship at <strong>SLB</strong>.</li>
-                    <li><span class="news-date">May 2025</span> Joined <strong>QCRI</strong> as Research Intern.</li>
-                    <li><span class="news-date">Feb 2025</span> <strong>1st Place</strong> at Invent for the Planet 2025.</li>
-                    <li><span class="news-date">Feb 2025</span> <strong>Best Poster</strong> at HBKU-TAMU Research.</li>
-                    <li><span class="news-date">Jan 2025</span> Selected for <strong>UG Research Scholars</strong> program.</li>
-                    <li><span class="news-date">Oct 2024</span> Won <strong>QF Tech Pitch</strong> ($11,000).</li>
-                    <li><span class="news-date">Aug 2024</span> Awarded <strong>UREP Grant</strong>.</li>
-                  </ul>
+                <div class="news-section-v2">
+                  <div class="news-scroll">
+                    <ul class="news-list-v2">
+                      <li class="news-item-v2"><span class="news-date-v2">May 2026</span><span><img src="img/gifs/new-icon-gif-11.gif" alt="New" style="height: 14px; width: auto; vertical-align: -2px; margin-right: 8px;">Starting as <strong>Research Scientist Intern</strong> working on VLMs at <strong>Overshoot</strong> (YC W26).</span></li>
+                      <li class="news-item-v2"><span class="news-date-v2">Apr 2026</span><span><img src="img/gifs/new-icon-gif-11.gif" alt="New" style="height: 14px; width: auto; vertical-align: -2px; margin-right: 8px;">Accepted to <strong>ICVSS</strong> Computer Vision Summer School in Sicily, Italy.</span></li>
+                      <li class="news-item-v2"><span class="news-date-v2">Mar 2026</span><span>Accepted to <strong>ACVSS</strong> Computer Vision Summer School in Accra, Ghana.</span></li>
+                      <li class="news-item-v2"><span class="news-date-v2">Mar 2026</span><span>Attending <strong>EACL</strong> in Rabat, Morocco this week.</span></li>
+                      <li class="news-item-v2"><span class="news-date-v2">Feb 2026</span><span>2 new papers on <strong>arXiv</strong>, make sure to check them out!</span></li>
+                      <li class="news-item-v2"><span class="news-date-v2">Jan 2026</span><span>Attending <strong>MenaML</strong> Machine Learning Winter School at <strong>KAUST</strong>.</span></li>
+                      <li class="news-item-v2"><span class="news-date-v2">Dec 2025</span><span>Heading to San Diego to give a talk and present <strong>EMPATHIA</strong> at <strong>NeurIPS 2025</strong>.</span></li>
+                      <li class="news-item-v2"><span class="news-date-v2">Oct 2025</span><span><strong>1st Place</strong> at QCRI Research Symposium.</span></li>
+                      <li class="news-item-v2"><span class="news-date-v2">Oct 2025</span><span>Gave a talk at <strong>MIT URTC</strong>.</span></li>
+                      <li class="news-item-v2"><span class="news-date-v2">Sep 2025</span><span>Visited <strong>EPFL</strong>.</span></li>
+                      <li class="news-item-v2"><span class="news-date-v2">Sep 2025</span><span>Paper accepted to <strong>NeurIPS 2025</strong> Proceedings.</span></li>
+                      <li class="news-item-v2"><span class="news-date-v2">Jul 2025</span><span>Paper accepted at <strong>ICML 2025</strong> Workshop.</span></li>
+                      <li class="news-item-v2"><span class="news-date-v2">Jun 2025</span><span>Started internship at <strong>SLB</strong>.</span></li>
+                      <li class="news-item-v2"><span class="news-date-v2">May 2025</span><span>Joined <strong>QCRI</strong> as Research Intern.</span></li>
+                      <li class="news-item-v2"><span class="news-date-v2">Feb 2025</span><span><strong>1st Place</strong> at Invent for the Planet 2025.</span></li>
+                      <li class="news-item-v2"><span class="news-date-v2">Feb 2025</span><span><strong>Best Poster</strong> at HBKU&ndash;TAMU Research.</span></li>
+                      <li class="news-item-v2"><span class="news-date-v2">Jan 2025</span><span>Selected for <strong>UG Research Scholars</strong> program.</span></li>
+                      <li class="news-item-v2"><span class="news-date-v2">Oct 2024</span><span>Won <strong>QF Tech Pitch</strong> ($11,000).</span></li>
+                      <li class="news-item-v2"><span class="news-date-v2">Aug 2024</span><span>Awarded <strong>UREP Grant</strong>.</span></li>
+                    </ul>
+                  </div>
                 </div>
 
-                <div style="margin-bottom: 2em;"></div>
-
-                <div class="row">
-                  <div class="col-md-12"><p class="lead">Research <em style="font-size: 0.8em; font-weight: 300; color: #000000;">(* denotes equal contribution)</em></p></div>
+                <div class="section-head">
+                  <span class="section-num">03</span>
+                  <h2>Research</h2>
+                  <span class="section-sub">* denotes equal contribution</span>
                 </div>
 
                 <div class="papers" id="papers"><div class='row paper-row'  id='2025' >
-<div class='col-md-3 col-xs-4'><img class='paperimage img img-responsive' src='img/publication_cover/arxiv.gif' /></div>
-<div class='col-md-9 col-xs-8'><div class='title'>Perception, Not Reasoning, Limits Visual False-Belief in Vision-Language Models</div><div class='pub-authors'><span class="nowrap"><span class="me">Mohamed Rayan Barhdadi</span></span>, <span class="nowrap">Erchin Serpedin</span>, <span class="nowrap">Hasan Kurban</span></div><div class='pub-venue'><strong>arXiv</strong> 2026</div><div class='publication-files'><span class="text-muted">paper (soon)</span>&nbsp;<span class="text-muted">project site (soon)</span>&nbsp;<span class="text-muted">code (soon)</span></div></div></div>
-<div class='row paper-row' >
 <div class='col-md-3 col-xs-4'><img class='paperimage img img-responsive' src='img/publication_cover/4dsync.jpg' /></div>
-<div class='col-md-9 col-xs-8'><div class='title'>4D Synchronized Fields: Motion-Language Gaussian Splatting for Temporal Scene Understanding</div><div class='pub-authors'><span class="nowrap"><span class="me">Mohamed Rayan Barhdadi</span></span>, <span class="nowrap">Samir Abdaljalil</span>, <span class="nowrap">Rasul Khanbayov</span>, <span class="nowrap">Erchin Serpedin</span>, <span class="nowrap">Hasan Kurban</span></div><div class='pub-venue'><strong>arXiv</strong> 2026</div><div class='publication-files'><a href='https://arxiv.org/abs/2603.14301' target="_blank" rel="noopener">paper</a>&nbsp;<span class="text-muted">project site (soon)</span>&nbsp;<span class="text-muted">code (soon)</span></div></div></div>
+<div class='col-md-9 col-xs-8'><div class='title'>4D Synchronized Fields: Motion-Language Gaussian Splatting</div><div class='pub-authors'><span class="me">MR Barhdadi</span>, S Abdaljalil, R Khanbayov, E Serpedin, and H Kurban</div><div class='pub-venue'><strong>arXiv</strong> 2026</div><div class='publication-files'><a href='https://arxiv.org/abs/2603.14301' target="_blank" rel="noopener">paper</a>&nbsp;<span class="text-muted">project site (soon)</span>&nbsp;<span class="text-muted">code (soon)</span></div></div></div>
 <div class='row paper-row' >
 <div class='col-md-3 col-xs-4'><img class='paperimage img img-responsive' src='img/publication_cover/iris.jpg' /></div>
-<div class='col-md-9 col-xs-8'><div class='title'>Inverse Recovery and Identification of Physical Dynamic Systems from Single Monocular Video</div><div class='pub-authors'><span class="nowrap">Rasul Khanbayov*</span>, <span class="nowrap"><span class="me">Mohamed Rayan Barhdadi*</span></span>, <span class="nowrap">Erchin Serpedin</span>, <span class="nowrap">Hasan Kurban</span></div><div class='pub-venue'><strong>arXiv</strong> 2026</div><div class='publication-files'><a href='https://arxiv.org/abs/2603.16432' target="_blank" rel="noopener">paper</a>&nbsp;<a href='https://github.com/KurbanIntelligenceLab/iris-benchmark.github.io' target="_blank" rel="noopener">code</a>&nbsp;<a href='https://kurbanintelligencelab.github.io/iris-benchmark.github.io/' target="_blank" rel="noopener">project site</a>&nbsp;<a href='https://huggingface.co/datasets/rasulkhanbayov/IRIS' target="_blank" rel="noopener">dataset</a></div></div></div>
+<div class='col-md-9 col-xs-8'><div class='title'>IRIS: A Real-World Benchmark for Inverse Recovery and Identification of Physical Dynamic Systems from Monocular Video</div><div class='pub-authors'>R Khanbayov*, <span class="me">MR Barhdadi</span>*, E Serpedin, and H Kurban</div><div class='pub-venue'><strong>arXiv</strong> 2026</div><div class='publication-files'><a href='https://arxiv.org/abs/2603.16432' target="_blank" rel="noopener">paper</a>&nbsp;<a href='https://github.com/KurbanIntelligenceLab/iris-benchmark.github.io' target="_blank" rel="noopener">code</a>&nbsp;<a href='https://kurbanintelligencelab.github.io/iris-benchmark.github.io/' target="_blank" rel="noopener">project site</a>&nbsp;<a href='https://huggingface.co/datasets/rasulkhanbayov/IRIS' target="_blank" rel="noopener">dataset</a></div></div></div>
 <div class='row paper-row' >
 <div class='col-md-3 col-xs-4'><a href='https://arxiv.org/abs/2508.07671' target="_blank" rel="noopener"><img class='paperimage img img-responsive' src='img/publication_cover/empathia.jpg' /></a></div>
-<div class='col-md-9 col-xs-8'><div class='title'>EMPATHIA: Multi-Faceted Human-AI Collaboration for Refugee Integration</div><div class='pub-authors'><span class="nowrap"><span class="me">Mohamed Rayan Barhdadi</span></span>, <span class="nowrap">Mehmet Tuncel</span>, <span class="nowrap">Erchin Serpedin</span>, <span class="nowrap">Hasan Kurban</span></div><div class='pub-venue'><strong>NeurIPS</strong> 2025</div><div class='publication-files'><a href='https://arxiv.org/abs/2508.07671' target="_blank" rel="noopener">paper</a>&nbsp;<a href='https://github.com/KurbanIntelligenceLab/empathia' target="_blank" rel="noopener">code</a>&nbsp;<a href='https://kurbanintelligencelab.github.io/empathia/' target="_blank" rel="noopener">project site</a></div></div></div>
+<div class='col-md-9 col-xs-8'><div class='title'>EMPATHIA: Multi-Faceted Human-AI Collaboration for Refugee Integration</div><div class='pub-authors'><span class="me">MR Barhdadi</span>, M Tuncel, E Serpedin, and H Kurban</div><div class='pub-venue'><strong>NeurIPS</strong> 2025</div><div class='publication-files'><a href='https://arxiv.org/abs/2508.07671' target="_blank" rel="noopener">paper</a>&nbsp;<a href='https://github.com/KurbanIntelligenceLab/empathia' target="_blank" rel="noopener">code</a>&nbsp;<a href='https://kurbanintelligencelab.github.io/empathia/' target="_blank" rel="noopener">project site</a></div></div></div>
 <div class='row paper-row' >
 <div class='col-md-3 col-xs-4'><a href='https://arxiv.org/abs/2505.23481' target="_blank" rel="noopener"><img class='paperimage img img-responsive' src='img/publication_cover/physicsnerf.jpg' /></a></div>
-<div class='col-md-9 col-xs-8'><div class='title'>PhysicsNeRF: Physics-Guided 3D Reconstruction from Sparse Views</div><div class='pub-authors'><span class="nowrap"><span class="me">Mohamed Rayan Barhdadi</span></span>, <span class="nowrap">Hasan Kurban</span>, <span class="nowrap">Hussein Alnuweiri</span></div><div class='pub-venue'><strong>ICML-W</strong> 2025 <em>(Building Physically Plausible World Models)</em></div><div class='publication-files'><a href='https://arxiv.org/abs/2505.23481' target="_blank" rel="noopener">paper</a>&nbsp;<a href='https://github.com/bmrayan/PhysicsNeRF' target="_blank" rel="noopener">code</a></div></div></div>
+<div class='col-md-9 col-xs-8'><div class='title'>PhysicsNeRF: Physics-Guided 3D Reconstruction from Sparse Views</div><div class='pub-authors'><span class="me">MR Barhdadi</span>, H Kurban, and H Alnuweiri</div><div class='pub-venue'><strong>ICML-W</strong> 2025 <em>(Building Physically Plausible World Models)</em></div><div class='publication-files'><a href='https://arxiv.org/abs/2505.23481' target="_blank" rel="noopener">paper</a>&nbsp;<a href='https://github.com/bmrayan/PhysicsNeRF' target="_blank" rel="noopener">code</a></div></div></div>
 </div>
 
                 </div> <!-- /col-md-9 -->
 
                 <div class="col-md-3">
+                  <div class="sb-top">
                     <div class="row">
                       <div class="col-xs-12 col-md-12">
                         <div id="msb-img-wrap">
@@ -121,7 +398,9 @@
                     <div class="vital-info">
                         <div><span style="color: #500000;">rayan.barhdadi [at] tamu.edu</span></div>
                     </div>
+                  </div>
 
+                  <div class="sb-bottom">
                     <div class="vital-info">
                         <div><a href="https://x.com/MRBarhdadi" target="_blank" rel="noopener">X (Twitter)</a></div>
                         <div><a href="https://www.linkedin.com/in/bmrayan/" target="_blank" rel="noopener">LinkedIn</a></div>
@@ -130,40 +409,51 @@
                     </div>
 
                     <div class="vital-info">
-                        <!-- <div><a href='pdfs/cv_rayan.pdf' target="_blank" rel="noopener">Curriculum vitae <em>(CV)</em></a></div> -->
+                        <div><a href='pdfs/cv_rayan.pdf' target="_blank" rel="noopener">Curriculum vitae <em>(CV)</em></a></div>
                     </div>
 
 		    <hr>
 
             <div class="vital-info">
-              <div>I'm always excited to discuss research collaborations. Feel free to reach out!</div>
+              <div>I'm always excited to discuss research. Feel free to reach out!</div>
             </div>
 
-            <div class="vital-info">
-              <h5>Advisors</h5>
-
-              <div class="row">
-                <div class="col-xs-2"><img class="groupmoji img-rounded" src="img/supervisors/hasan_kurban.jpg" alt="Hasan Kurban"></div>
-                <div class="col-xs-10"><a href="https://www.hasankurban.com/" target="_blank" rel="noopener">Hasan Kurban</a><br><span class="advisor-aff">Director, Kurban Intelligence Lab<br>and Asst. Professor, HBKU</span></div>
+            <div class="advisor-block-v2">
+              <div class="advisor-title-v2">Advisors</div>
+              <div class="advisor-row-v2">
+                <img class="advisor-img-v2" src="img/supervisors/hasan_kurban.jpg" alt="Hasan Kurban">
+                <div>
+                  <div class="advisor-name-v2"><a href="https://www.hasankurban.com/" target="_blank" rel="noopener">Hasan Kurban</a></div>
+                  <div class="advisor-aff-v2">Director, Kurban Intelligence Lab<br>Asst. Professor, HBKU</div>
+                </div>
               </div>
-              <div class="row">
-                <div class="col-xs-2"><img class="groupmoji img-rounded" src="img/supervisors/erchin_serpedin.jpg" alt="Erchin Serpedin"></div>
-                <div class="col-xs-10"><a href="https://engineering.tamu.edu/electrical/profiles/eserpedin.html" target="_blank" rel="noopener">Erchin Serpedin</a><br><span class="advisor-aff">Full Professor, Texas A&amp;M<br>and ECEN Dept. Chair (of Qatar Campus)</span></div>
-              </div>
-            </div>
-
-            <div class="vital-info">
-              <h5>QCRI Internship Supervisors</h5>
-
-              <div class="row">
-                <div class="col-xs-2"><img class="groupmoji img-rounded" src="img/supervisors/halima_bensmail.avif" alt="Halima Bensmail"></div>
-                <div class="col-xs-10"><a href="https://scholar.google.com/citations?user=Nlf0C2EAAAAJ&hl=en" target="_blank" rel="noopener">Halima Bensmail</a><br><span class="advisor-aff">Principal Scientist, QCRI</span></div>
-              </div>
-              <div class="row">
-                <div class="col-xs-2"><img class="groupmoji img-rounded" src="img/supervisors/michael_aupetit.avif" alt="Michaël Aupetit"></div>
-                <div class="col-xs-10"><a href="https://scholar.google.com/citations?user=UszzuaAAAAAJ&hl=en" target="_blank" rel="noopener">Michaël Aupetit</a><br><span class="advisor-aff">Senior Scientist, QCRI</span></div>
+              <div class="advisor-row-v2">
+                <img class="advisor-img-v2" src="img/supervisors/erchin_serpedin.jpg" alt="Erchin Serpedin">
+                <div>
+                  <div class="advisor-name-v2"><a href="https://engineering.tamu.edu/electrical/profiles/eserpedin.html" target="_blank" rel="noopener">Erchin Serpedin</a></div>
+                  <div class="advisor-aff-v2">Full Professor, Texas A&amp;M<br>ECEN Dept. Chair (Qatar Campus)</div>
+                </div>
               </div>
             </div>
+
+            <div class="advisor-block-v2">
+              <div class="advisor-title-v2">QCRI Internship Supervisors</div>
+              <div class="advisor-row-v2">
+                <img class="advisor-img-v2" src="img/supervisors/halima_bensmail.avif" alt="Halima Bensmail">
+                <div>
+                  <div class="advisor-name-v2"><a href="https://scholar.google.com/citations?user=Nlf0C2EAAAAJ&hl=en" target="_blank" rel="noopener">Halima Bensmail</a></div>
+                  <div class="advisor-aff-v2">Principal Scientist, QCRI</div>
+                </div>
+              </div>
+              <div class="advisor-row-v2">
+                <img class="advisor-img-v2" src="img/supervisors/michael_aupetit.avif" alt="Michaël Aupetit">
+                <div>
+                  <div class="advisor-name-v2"><a href="https://scholar.google.com/citations?user=UszzuaAAAAAJ&hl=en" target="_blank" rel="noopener">Michaël Aupetit</a></div>
+                  <div class="advisor-aff-v2">Senior Scientist, QCRI</div>
+                </div>
+              </div>
+            </div>
+                  </div> <!-- /sb-bottom -->
                 </div>
             </div> <!-- /row -->
 
@@ -171,7 +461,11 @@
 
     <div class="container">
         <section id="hobbies" class="hobbies-section">
-            <p class="lead">Hobbies outside of research ;)</p>
+            <div class="section-head">
+              <span class="section-num">04</span>
+              <h2>Outside research</h2>
+              <span class="section-sub">mountains, distance running, the open road</span>
+            </div>
             <div class="hobbies-row">
                 <div class="hobbies-text">
                     <p>Outside of research, I spend most of my free time in nature, and I love mountains. I've summited multiple peaks and trailed through many places, including the highest peaks in North Africa and some beautiful summits and treks in Switzerland, British Columbia, Oman, and more. I run long distances and camp whenever I can. Both tend to take me somewhere I haven't been before, which is the point - I believe that in our world there are hidden answers for those who are willing to go find them.</p>
@@ -180,11 +474,10 @@
                     <div class="hobbies-grid">
                         <img src="img/hobbies/traveling.jpg" alt="Travel" class="hobby-image">
                         <img src="img/hobbies/hiking.jpg" alt="Atlas Mountains" class="hobby-image">
-                        <img src="img/hobbies/running.jpg" alt="Running" class="hobby-image">
                     </div>
                 </div>
             </div>
-            <p class="hobby-places-line"><em>1: George Bush Intercontinental Airport, Houston, TX, USA &nbsp;&middot;&nbsp; 2: Mt. Toubkal (4,167m), Morocco, North Africa &nbsp;&middot;&nbsp; 3: Education City, Doha, Qatar</em></p>
+            <p class="hobby-places-line"><em>1: George Bush Intercontinental Airport, Houston, TX, USA &nbsp;&middot;&nbsp; 2: Mt. Toubkal (4,167m), Morocco, North Africa</em></p>
         </section>
     </div>
 
