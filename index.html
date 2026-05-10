@@ -97,9 +97,18 @@
             body { padding-top: 122px !important; }
         }
         @media (max-width: 600px) {
-            #msbnav .navbar-brand { font-size: 2.1rem !important; line-height: 1.05 !important; }
+            #msbnav .navbar-brand {
+                font-size: clamp(1.25rem, 4.6vw, 1.85rem) !important;
+                line-height: 1.1 !important;
+                padding-right: 14px !important;
+            }
+            #msbnav { padding-left: 16px !important; padding-right: 16px !important; }
             #msbnav .container { padding-top: 10px !important; padding-bottom: 10px !important; }
-            body { padding-top: 102px !important; }
+            body { padding-top: 92px !important; }
+        }
+        @media (max-width: 400px) {
+            #msbnav .navbar-brand { font-size: 1.2rem !important; }
+            body { padding-top: 86px !important; }
         }
         /* Light grey line above the social links (separates email block from socials/advisors) */
         .sb-bottom > .vital-info:first-child {
@@ -145,9 +154,9 @@
         @media (max-width: 600px) {
             .section-head h2 { font-size: 26px !important; }
         }
-        /* When the long "mountains..." subtitle wraps to its own line, left-align it */
+        /* When any section subtitle wraps to its own line, left-align it (was hobbies-only) */
         @media (max-width: 800px) {
-            .hobbies-section .section-head .section-sub {
+            .section-head .section-sub {
                 margin-left: 0 !important;
             }
         }
@@ -280,6 +289,27 @@
             color: #500000;
             font-weight: 400;
             white-space: nowrap;
+        }
+
+        /* Phone-only: stack image above text in papers and Outside Research */
+        @media (max-width: 600px) {
+            .papers .paper-row {
+                flex-direction: column !important;
+                align-items: stretch !important;
+            }
+            .papers .paper-row > [class*="col-"] {
+                float: none !important;
+                width: 100% !important;
+                max-width: 100% !important;
+                padding-left: 0 !important;
+                padding-right: 0 !important;
+            }
+            .papers .paper-row > [class*="col-"]:first-child {
+                max-width: 55% !important;
+                margin: 0 0 12px 0 !important;
+            }
+            /* Outside Research: image grid above the text on phone */
+            .hobbies-grid-wrap { order: -1 !important; }
         }
     </style>
 
