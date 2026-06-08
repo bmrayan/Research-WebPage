@@ -215,23 +215,44 @@
             margin-top: 2px;
         }
 
-        /* Hobby images: 2-up, slightly wider columns, less tall */
-        .hobbies-row { gap: 40px !important; }
-        .hobbies-text { flex: 0 0 44% !important; }
-        .hobbies-grid-wrap { align-self: flex-start !important; }
-        .hobbies-grid {
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)) !important;
+        /* Outside Research: full-width text with images underneath */
+        .hobbies-row {
+            flex-direction: column !important;
             gap: 18px !important;
+        }
+        .hobbies-text {
+            flex: none !important;
+            width: 100% !important;
+            max-width: 100% !important;
+        }
+        .hobbies-grid-wrap {
+            width: 100% !important;
+            align-self: stretch !important;
+        }
+        .hobbies-grid {
+            grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+            gap: 14px !important;
             height: auto !important;
+            width: 100% !important;
+            max-width: none !important;
+            margin: 0 !important;
         }
         .hobby-image {
             width: 100%;
             height: auto !important;
-            aspect-ratio: 4 / 3;
+            aspect-ratio: 6 / 5;
             object-fit: cover;
         }
         @media (max-width: 600px) {
-            .hobbies-grid { grid-template-columns: 1fr !important; max-width: 75% !important; }
+            .hobbies-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+                max-width: none !important;
+            }
+            .hobbies-grid .hobby-image:last-child {
+                grid-column: 1 / -1 !important;
+                justify-self: center !important;
+                width: calc((100% - 14px) / 2) !important;
+            }
         }
 
         /* Underline 'me' in author list (LaTeX \uline + \raisebox style) */
@@ -323,8 +344,8 @@
                 max-width: 55% !important;
                 margin: 0 0 12px 0 !important;
             }
-            /* Outside Research: image grid above the text on phone */
-            .hobbies-grid-wrap { order: -1 !important; }
+            /* Outside Research keeps the images underneath the text on phone */
+            .hobbies-grid-wrap { order: 0 !important; }
         }
         /* uniform 1em spacing between vision/bio blocks */
         .col-md-9 > p,
@@ -512,12 +533,14 @@
                 </div>
                 <div class="hobbies-grid-wrap">
                     <div class="hobbies-grid">
-                        <img src="img/hobbies/traveling.jpg" alt="Travel" class="hobby-image">
+                        <img src="img/hobbies/ia3.jpg" alt="Outside research photo 1" class="hobby-image">
+                        <img src="img/hobbies/ia4.jpg" alt="Outside research photo 2" class="hobby-image">
                         <img src="img/hobbies/hiking.jpg" alt="Atlas Mountains" class="hobby-image">
+                        <img src="img/hobbies/ia1.jpg" alt="Outside research photo 5" class="hobby-image">
+                        <img src="img/hobbies/ia2.jpg" alt="Outside research photo 6" class="hobby-image">
                     </div>
                 </div>
             </div>
-            <p class="hobby-places-line"><em>1: George Bush Intercontinental Airport, Houston, TX, USA &nbsp;&middot;&nbsp; 2: Mt. Toubkal (4,167m), Morocco, North Africa</em></p>
         </section>
     </div>
 
